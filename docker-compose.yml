@@ -41,7 +41,7 @@ services:
       volumes:
           - ./server-config/nginx/nginx.conf:/etc/nginx/nginx.conf
           - ./server-config/nginx/nginx-camagru.conf:/etc/nginx/sites-enabled/nginx-camagru.conf
-          - ./app:/var/www/html
+          - ./app:${ROOT}
       ports:
           - "80:80"
       # restart: always
@@ -55,7 +55,7 @@ services:
       restart: always
       volumes:
           - "./server-config/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
-          - "./app:/var/www/html"
+          - "./app:${ROOT}"
   # composer:
   #     image: "composer"
   #     volumes:
