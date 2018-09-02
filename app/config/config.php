@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 define("ROOT", $_SERVER['ROOT']);
 define("CONTROLLER_PATH", ROOT . "/controllers/");
 define("MODEL_PATH", ROOT . "/models/");

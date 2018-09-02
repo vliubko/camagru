@@ -10,6 +10,11 @@ class CabinetController extends Controller {
     }
 
     public function index() {
+
+        if(!$_SESSION['user']) {
+            header("Location: /");
+        }
+
         $this->pageData['title'] = "Cabinet";
 
         $photosCount = $this->model->getPhotosCount();
@@ -21,6 +26,10 @@ class CabinetController extends Controller {
         $this->view->render($this->pageTpl, $this->pageData);
     }
 
+    public function logout() {
+        session_destroy();
+        header ("Location: /");
+    }
 }
 
 ?>
