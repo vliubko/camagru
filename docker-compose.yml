@@ -36,6 +36,7 @@ version: '3'
 services:
   web:
       image: nginx:1.13
+      container_name: web
       env_file:
           - ".env"
       volumes:
@@ -56,11 +57,19 @@ services:
       volumes:
           - "./server-config/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
           - "./app:${ROOT}"
-  # composer:
-  #     image: "composer"
-  #     volumes:
-  #         - "./app:/app"
-  #     command: install
+#   go-mailhog:
+#       build: ./server-config/go-mailhog/.
+#       container_name: go-mailhog
+#       tty: true
+#       volumes:
+#           - ./server-config/bin/:/go/
+  mailhog:
+      image: mailhog/mailhog:v1.0.0
+      container_name: mailhog
+      restart: always
+      ports:
+        - "1025:1025"
+        - "8025:8025"
   phpmyadmin:
       image: phpmyadmin/phpmyadmin
       container_name: phpmyadmin
