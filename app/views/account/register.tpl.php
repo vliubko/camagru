@@ -18,10 +18,9 @@
             <?php if(!empty($pageData['error'])) :?>
                 <p><?php echo $pageData['error']; ?></p>
             <?php endif; ?>
-            <input type="text" name="login" id="login" placeholder="Email" autofocus><br>
+            <input type="text" name="login" id="user" placeholder="Username" autofocus><br>
+            <input type="password" name="password" id="email" placeholder="Email" required><br>
             <input type="password" name="password" id="password" placeholder="Password" required><br>
-            <input type="password" name="password" id="password" placeholder="Password" required><br>
-            
         <button type="submit">
             Sign in</button>
     </form>

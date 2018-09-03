@@ -30,6 +30,18 @@ class AccountModel extends Model {
 			return false;
 		}
     }
+
+    public function validatePassword() {
+        return false;
+    }
+
+    public function validateEmail() {
+        return false;
+    }
+
+    public function validateUsername() {
+        return false;
+    }
 }
 
 ?>
