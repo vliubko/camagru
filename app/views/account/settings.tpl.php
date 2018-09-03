@@ -13,8 +13,6 @@
 
     <?php echo "Hello," . $_SESSION['name']; ?>
 
-    <a href="/account/sendmail">Send Email</a> <br>
-
     <a href="/account/logout">Logout</a> <br>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
