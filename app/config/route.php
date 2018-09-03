@@ -24,6 +24,11 @@ class Routing {
 			$modelName = ucfirst($route[1]. "Model");
         }
         
+        if (!file_exists(CONTROLLER_PATH . $controllerName . ".php")) {
+            header("Location: /public/404.html");
+            return;
+        }
+
         require_once CONTROLLER_PATH . $controllerName . ".php"; //IndexController.php
         require_once MODEL_PATH . $modelName . ".php"; //IndexModel.php
         
@@ -32,10 +37,6 @@ class Routing {
         }
         
         $controller = new $controllerName();
-		$controller->$action(); // $controller->index();
+		$controller->$action();
     }
-
-    public function errorPage() {
-
-	}
 }

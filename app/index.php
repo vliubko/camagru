@@ -5,5 +5,4 @@ require_once("config/config.php");
 
 $inipath = php_ini_loaded_file();
 
-
 ?>
