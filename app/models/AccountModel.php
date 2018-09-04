@@ -68,8 +68,8 @@ class AccountModel extends Model {
 
     // TODO check email already registered
     public function validateEmail() {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return "Invalid email";
+        if (!filter_var($this->$email, FILTER_VALIDATE_EMAIL)) {
+            return "Invalid email ". $this->$email;
         }
         return;
     }

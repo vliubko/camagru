@@ -17,9 +17,10 @@
     <form id="register" method="post">
             <?php if(!empty($pageData['error'])) :?>
                 <p><?php echo $pageData['error']; ?></p>
+                <p><?php var_dump($_POST); ?></p>
             <?php endif; ?>
             <input type="text" name="user" id="user" placeholder="Username" autofocus><br>
-            <input name="email" id="email" placeholder="Email" required><br>
+            <input type="email" name="email" id="email" placeholder="Email" required><br>
             <input type="password" name="password" id="password" placeholder="Password" required><br>
         <button type="submit">
             Register
