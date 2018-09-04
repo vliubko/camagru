@@ -37,6 +37,10 @@ class Routing {
         }
         
         $controller = new $controllerName();
-		$controller->$action();
+        if (!method_exists($controller, $action)) {
+            header("Location: /public/404.html");
+            return;
+        }
+        $controller->$action();
     }
 }
