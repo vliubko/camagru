@@ -1,12 +1,37 @@
 <?php
 
 class AccountModel extends Model {
+    
+    public $user;
+    public $password;
+    public $email;
 
     public function checkSession() {
         if (!empty($_SESSION['user'])) {
             return true;
         }
         return false;
+    }
+
+    public function registerUser() {
+
+        $this->$user = $_POST['user'];
+        $this->$email = $_POST['email'];
+        $this->$password = $_POST['password'];
+
+        $errors[] = AccountModel::validatePassword();
+        $errors[] = AccountModel::validateEmail();
+        $errors[] = AccountModel::validateUsername();
+        $errors = array_filter($errors);
+        
+        foreach ($errors as $e) {
+            if (!empty($e))
+            $message = $e;
+        }
+        if (!empty($message)) {
+            return $message;
+        }
+        return "Succesful registration.";
     }
 
     public function checkUserExist() {
@@ -32,15 +57,29 @@ class AccountModel extends Model {
     }
 
     public function validatePassword() {
-        return false;
+        if (strlen($this->$password) < 6) {
+            return "Password too short (at least 6 symbols)";
+        }
+        if (!preg_match('/^(?=.*\d)([0-9a-zA-Z@!]+)$/', $this->password)) {
+            return "Password should contain at least one digit";
+        }
+        return;
     }
 
+    // TODO check email already registered
     public function validateEmail() {
-        return false;
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return "Invalid email";
+        }
+        return;
     }
 
+     // TODO check username already taken
     public function validateUsername() {
-        return false;
+        if (!preg_match('/^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/', $this->$password)) {
+            return "Forbidden symbols in login";
+        }
+        return;
     }
 }
 

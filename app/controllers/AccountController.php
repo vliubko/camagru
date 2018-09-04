@@ -27,7 +27,6 @@ class AccountController extends Controller {
                     $this->pageData['error'] = "Wrong login or password";
                 }
             }
-
             $this->view->render($this->pageTpl, $this->pageData);
         }
         else {
@@ -72,15 +71,8 @@ class AccountController extends Controller {
             $this->pageData['title'] = "Register";
 
             if(!empty($_POST)) {
-                if (!$this->model->validatePassword()) {
-                    $this->pageData['error'] = "Password should contain min 8 chars. Also should be at least 1 capital letter and 1 number";
-                }
-                if (!$this->model->validateEmail()) {
-                    $this->pageData['error'] = "Please, enter correct email";
-                }
-                if (!$this->model->validateUsername()) {
-                    $this->pageData['error'] = "Current username is already been taken";
-                }
+                $message = $this->model->registerUser();
+                $this->pageData['error'] = $message;
             }
             $this->view->render($this->pageTpl, $this->pageData);
         }

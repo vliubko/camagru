@@ -18,11 +18,12 @@
             <?php if(!empty($pageData['error'])) :?>
                 <p><?php echo $pageData['error']; ?></p>
             <?php endif; ?>
-            <input type="text" name="login" id="user" placeholder="Username" autofocus><br>
-            <input type="password" name="password" id="email" placeholder="Email" required><br>
+            <input type="text" name="user" id="user" placeholder="Username" autofocus><br>
+            <input name="email" id="email" placeholder="Email" required><br>
             <input type="password" name="password" id="password" placeholder="Password" required><br>
         <button type="submit">
-            Sign in</button>
+            Register
+        </button>
     </form>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
