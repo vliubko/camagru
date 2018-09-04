@@ -59,11 +59,6 @@ class AccountController extends Controller {
         }
     }
 
-    public function sendmail() {
-        $error = mail("neznam.ua@gmail.com", "Activation link", "Hi there! Camagru is waiting.", "From: Camagru");
-
-        var_dump ($error);
-    }
 
     public function register() {
         if(!$this->model->checkSession()) {
