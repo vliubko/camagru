@@ -6,6 +6,15 @@ class MyPDO extends PDO {
         $stmt->execute($args);
         return $stmt;
     }
+
+    function insert($fields, $values) {
+        $set = '';
+        $allFields = array_combine($fields, $values);
+        foreach ($allFields as $key => $value) {
+            $set.="`".str_replace("`","``",$key)."`". "=\"$value\", ";
+        }
+        return substr($set, 0, -2); 
+    }
 }
 
 Class DB {
@@ -22,6 +31,7 @@ Class DB {
             PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
         ];
         try {
             $connection = new MyPDO($dsn, $user, $pass, $opt);

@@ -5,6 +5,7 @@ class AccountModel extends Model {
     public $username;
     public $password;
     public $email;
+    public $name;
     public $token;
 
     public function checkSession() {
@@ -18,7 +19,8 @@ class AccountModel extends Model {
 
         $this->username = $_POST['user'];
         $this->email = $_POST['email'];
-        $this->password = $_POST['password'];
+        $this->name = $_POST['name'];
+        $this->password = hash('whirlpool', $_POST['password']);
 
         $errors[] = AccountModel::validatePassword();
         $errors[] = AccountModel::validateEmail();
@@ -37,8 +39,12 @@ class AccountModel extends Model {
         return "Succesful registration.";
     }
 
-    //TODO Add entry to DB
     public function addNewUserToDB() {
+        $fields = array("username","name","email","password");
+        $values = array(
+            $this->username,$this->name,$this->email,$this->password);
+        $sql = "INSERT INTO user SET ".$this->db->insert($fields,$values);
+        $res = $this->db->run($sql);
         return ;
     }
 
