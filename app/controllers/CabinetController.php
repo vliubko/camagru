@@ -11,7 +11,7 @@ class CabinetController extends Controller {
 
     public function index() {
 
-        if(!$_SESSION['user']) {
+        if(!$_SESSION['username']) {
             header("Location: /");
         }
 
