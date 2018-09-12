@@ -57,12 +57,6 @@ services:
       volumes:
           - "./server-config/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
           - "./app:${ROOT}"
-#   go-mailhog:
-#       build: ./server-config/go-mailhog/.
-#       container_name: go-mailhog
-#       tty: true
-#       volumes:
-#           - ./server-config/bin/:/go/
   mailhog:
       image: mailhog/mailhog:v1.0.0
       container_name: mailhog
