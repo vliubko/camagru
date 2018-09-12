@@ -23,7 +23,7 @@ class AccountController extends Controller {
             $this->pageData['title'] = "Camagru Login";
 
             if(!empty($_POST)) {
-                if (!$this->model->checkUserExist()) {
+                if (!$this->model->checkUserLogin()) {
                     $this->pageData['error'] = "Wrong login or password";
                 }
             }

@@ -73,11 +73,25 @@ class AccountModel extends Model {
         return $key . md5($this->email);
     }
 
-    public function checkUserExist() {
-        $username = $_POST['login'];
-		$password = $_POST['password'];
-		$name = "default";
+    public function checkUserExist($username) {
+        $sql = "SELECT * FROM user WHERE username = ?";
+        $res = $this->db->run($sql, [$username])->fetchColumn();
 
+        if (!$res) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function checkUserLogin() {
+        $username = $_POST['login'];
+		$password = hash('whirlpool', $_POST['password']);
+		$name = "default";
+        
+        if (!$this->checkUserExist($username)) {
+            return false;
+        }
         $sql = "SELECT name FROM user WHERE username = ? AND password = ?";
         $res = $this->db->run($sql, [$username, $password])->fetchColumn();
     
@@ -100,7 +114,6 @@ class AccountModel extends Model {
         return;
     }
 
-    // TODO check email already registered
     public function validateEmail() {
         if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
             return "Invalid email ". $this->email;
@@ -108,10 +121,12 @@ class AccountModel extends Model {
         return;
     }
 
-     // TODO check username already taken
     public function validateUsername() {
         if (!preg_match('/^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/', $this->username)) {
             return "Forbidden symbols in login";
+        }
+        if ($this->checkUserExist($this->username)) {
+            return "Username already taken";
         }
         return;
     }
