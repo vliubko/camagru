@@ -7,9 +7,10 @@ class AccountModel extends Model {
     public $email;
     public $name;
     public $token;
+    public $user_id;
 
     public function checkSession() {
-        if (!empty($_SESSION['user'])) {
+        if (!empty($_SESSION['username'])) {
             return true;
         }
         return false;
@@ -43,7 +44,18 @@ class AccountModel extends Model {
         $fields = array("username","name","email","password");
         $values = array(
             $this->username,$this->name,$this->email,$this->password);
-        $sql = "INSERT INTO user SET ".$this->db->insert($fields,$values);
+        $sql = "INSERT INTO user SET ".$this->db->pdoSet($fields,$values);
+        $res = $this->db->run($sql);
+        return ;
+    }
+
+    public function updateUserSettings() {
+        $fields = array("username","name","email","password");
+        $values = array(
+            $this->username,$this->name,$this->email,$this->password);
+
+        $user_id = $this->getUserId();
+        $sql = "UPDATE user SET ".$this->db->pdoSet($fields,$values)." WHERE id = ". $user_id;
         $res = $this->db->run($sql);
         return ;
     }
@@ -102,12 +114,18 @@ class AccountModel extends Model {
         $res = $this->db->run($sql, [$username, $password])->fetchColumn();
     
 		if(!empty($res)) {
-            $_SESSION['user'] = $username;
+            $_SESSION['username'] = $username;
             $_SESSION['name'] = $res;
 			header("Location: /account/settings");
 		} else {
 			return false;
 		}
+    }
+
+    public function getUserId() {
+        $sql = "SELECT id FROM user WHERE username = ?";
+        $id = $this->db->run($sql, [$_SESSION['username']])->fetchColumn();
+        return $id;
     }
 
     public function validatePassword() {

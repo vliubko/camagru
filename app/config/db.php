@@ -7,7 +7,7 @@ class MyPDO extends PDO {
         return $stmt;
     }
 
-    function insert($fields, $values) {
+    function pdoSet($fields, $values) {
         $set = '';
         $allFields = array_combine($fields, $values);
         foreach ($allFields as $key => $value) {
