@@ -57,7 +57,10 @@ class AccountModel extends Model {
         $message = "Cool registration. Your token is: " . $this->token;
 
         $error = mail($to, $subject, $message, $headers);
-        var_dump ($error);
+        if ($error != TRUE) {
+            echo "Mail not send. Something went wrong.";
+        }
+        //var_dump ($error);
     }
 
     public function tokenGenerate() {
@@ -73,19 +76,14 @@ class AccountModel extends Model {
     public function checkUserExist() {
         $username = $_POST['login'];
 		$password = $_POST['password'];
+		$name = "default";
 
-		$sql = "SELECT * FROM user WHERE username = :username AND password = :password";
-
-		$stmt = $this->db->prepare($sql);
-		$stmt->bindValue(":username", $username, PDO::PARAM_STR);
-        $stmt->bindValue(":password", $password, PDO::PARAM_STR);
-		$stmt->execute();
-
-		$res = $stmt->fetch(PDO::FETCH_ASSOC);
-
+        $sql = "SELECT name FROM user WHERE username = ? AND password = ?";
+        $res = $this->db->run($sql, [$username, $password])->fetchColumn();
+    
 		if(!empty($res)) {
             $_SESSION['user'] = $username;
-            $_SESSION['name'] = $res['name'];
+            $_SESSION['name'] = $res;
 			header("Location: /account/settings");
 		} else {
 			return false;
