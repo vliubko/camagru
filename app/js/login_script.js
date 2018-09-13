@@ -9,7 +9,7 @@ $(document).ready(function(){
             if(login == '' || password == '') {
                 $("img.profile-img").attr("src", "/data/images/error.png");
             } else {
-                $("img.profile-img").attr("src", "/data/images/ok.png");
+                $("img.profile-img").attr("src", "/data/images/loading.png");
                 $(this).unbind().submit();
             }
         });
