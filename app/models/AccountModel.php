@@ -4,40 +4,18 @@ class AccountModel extends Model {
     
     public $username;
     public $password;
+    public $old_pwd;
     public $email;
     public $name;
     public $token;
     public $user_id;
+    public $notification;
 
     public function checkSession() {
         if (!empty($_SESSION['username'])) {
             return true;
         }
         return false;
-    }
-
-    public function registerUser() {
-
-        $this->username = $_POST['user'];
-        $this->email = $_POST['email'];
-        $this->name = $_POST['name'];
-        $this->password = hash('whirlpool', $_POST['password']);
-
-        $errors[] = AccountModel::validatePassword();
-        $errors[] = AccountModel::validateEmail();
-        $errors[] = AccountModel::validateUsername();
-        $errors = array_filter($errors);
-        
-        foreach ($errors as $e) {
-            if (!empty($e))
-            $message = $e;
-        }
-        if (!empty($message)) {
-            return $message;
-        }
-        $this->addNewUserToDB();
-        $this->sendMailConfirmation();
-        return "Succesful registration.";
     }
 
     public function addNewUserToDB() {
@@ -49,20 +27,87 @@ class AccountModel extends Model {
         return ;
     }
 
-    public function updateUserSettings() {
-        $fields = array("username","name","email","password");
-        $values = array(
-            $this->username,$this->name,$this->email,$this->password);
-
+    public function updateUserDb() {
         $user_id = $this->getUserId();
-        $sql = "UPDATE user SET ".$this->db->pdoSet($fields,$values)." WHERE id = ". $user_id;
+
+        $fields = array("username","email","notification");
+        $values = array(
+            $this->username,$this->email,$this->notification);
+        $sql = "UPDATE user SET ".$this->db->pdoSet($fields,$values)." WHERE id = ".$user_id;
+
         $res = $this->db->run($sql);
+    }
+
+    public function updateUserData() {
+        $errors[] = AccountModel::validateUpdatingEmail($_POST['email']);
+        $errors[] = AccountModel::validateUpdatingUsername($_POST['user']);
+        
+        foreach ($errors as $e) {
+            if (!empty($e))
+            $message = $e;
+        }
+        if (!empty($message)) {
+            return $message;
+        }
+        $this->username = $_POST['user'];
+        $this->email = $_POST['email'];
+        if (isset($_POST['notification'])) {
+            $this->notification = 1;
+        } else {
+            $this->notification = 0;
+        }
+        
+        $this->updateUserDb();
+        $_SESSION['username'] = $this->username;
+        $_SESSION['email'] = $this->email;
+        $_SESSION['notification'] = $this->notification;
+        return "Data changed succesfully.";
+    }
+
+    public function validateUserData() {
+        $errors[] = AccountModel::validatePassword();
+        $errors[] = AccountModel::validateEmail($this->email);
+        $errors[] = AccountModel::validateUsername($this->username);
+        $errors = array_filter($errors);
+
+        foreach ($errors as $e) {
+            if (!empty($e))
+            $message = $e;
+        }
+        if (!empty($message)) {
+            return $message;
+        }
         return ;
     }
 
+    public function changePasswordCheck() {
+        $new_pwd = $this->password;
+        if ($new_pwd === $old_pwd) {
+            return "Password should not be as old password";
+        }
+        return ;
+    }
+
+    public function registerUser() {
+
+        $this->username = $_POST['user'];
+        $this->email = $_POST['email'];
+        $this->name = $_POST['name'];
+        $this->password = $_POST['password'];
+
+        $message = $this->validateUserData();
+        if (!empty($message)) {
+            return $message;
+        }
+        $this->password = hash('whirlpool', $_POST['password']);
+        $this->addNewUserToDB();
+        $this->sendMailConfirmation();
+        return "Succesful registration. <br>Email with activation link sent to ".$this->email;
+    }
+
+
     //TODO sendmail message.
     public function sendMailConfirmation() {
-
         $this->token = $this->tokenGenerate();
         $to = $this->email;
         $subject = 'Activation link';
@@ -78,7 +123,6 @@ class AccountModel extends Model {
         if ($error != TRUE) {
             echo "Mail not send. Something went wrong.";
         }
-        //var_dump ($error);
     }
 
     public function tokenGenerate() {
@@ -116,6 +160,9 @@ class AccountModel extends Model {
 		if(!empty($res)) {
             $_SESSION['username'] = $username;
             $_SESSION['name'] = $res;
+            $user_data = $this->getUserData();
+            $_SESSION['email'] = $user_data['email'];
+            $_SESSION['notification'] = $user_data['notification'];
 			header("Location: /account/settings");
 		} else {
 			return false;
@@ -124,8 +171,31 @@ class AccountModel extends Model {
 
     public function getUserId() {
         $sql = "SELECT id FROM user WHERE username = ?";
-        $id = $this->db->run($sql, [$_SESSION['username']])->fetchColumn();
-        return $id;
+        $user_id = $this->db->run($sql, [$_SESSION['username']])->fetchColumn();
+        return $user_id;
+    }
+
+    public function getUserData() {
+        $sql = "SELECT * FROM user WHERE username = ?";
+        $user_data = $this->db->run($sql, [$_SESSION['username']])->fetch();
+        
+        $this->$username = $user_data['username'];
+        $this->$email = $user_data['email'];
+        $this->$name = $user_data['name'];
+        $this->$user_id = $user_data['id'];
+        $this->old_pwd = $user_data['password'];
+        $this->notification = $user_data['notification'];
+
+        return $user_data;
+    }
+    
+    public function checkEmailRegistered($email) {
+        $sql = "SELECT email FROM user WHERE email = ?";
+        $email = $this->db->run($sql, [$email])->fetch();
+        if (!empty($email)) {
+            return true;
+        }
+        return false;
     }
 
     public function validatePassword() {
@@ -138,19 +208,42 @@ class AccountModel extends Model {
         return;
     }
 
-    public function validateEmail() {
-        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-            return "Invalid email ". $this->email;
+    public function validateEmail($email) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return "Invalid email ". $email;
+        } else if ($this->checkEmailRegistered($email)) {
+            return "Email " . $email . " already taken";
         }
         return;
     }
 
-    public function validateUsername() {
-        if (!preg_match('/^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/', $this->username)) {
+    public function validateUsername($username) {
+        if (!preg_match('/^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/', $username)) {
             return "Forbidden symbols in login";
         }
-        if ($this->checkUserExist($this->username)) {
-            return "Username already taken";
+        if ($this->checkUserExist($username)) {
+            return "Username " . $username . " already taken";
+        }
+        return;
+    }
+
+    public function validateUpdatingUsername($username) {
+        $user_data = $this->getUserData();
+        if (!preg_match('/^[A-Za-z0-9]+(?:[_-][A-Za-z0-9]+)*$/', $username)) {
+            return "Forbidden symbols in login";
+        }
+        if ($this->checkUserExist($username) && $username != $user_data['username']) {
+            return "Username " . $username . " already taken";
+        }
+        return;
+    }
+
+    public function validateUpdatingEmail($email) {
+        $user_data = $this->getUserData();
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return "Invalid email ". $email;
+        } else if ($this->checkEmailRegistered($email) && $email != $user_data['email']) {
+            return "Email " . $email . " already taken";
         }
         return;
     }

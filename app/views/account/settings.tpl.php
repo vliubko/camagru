@@ -19,17 +19,44 @@
             <?php if(!empty($pageData['error'])) :?>
                 <p><?php echo $pageData['error']; ?></p>
             <?php endif; ?>
+            
             <p> Username</p>
-            <input type="text" name="user" id="user" placeholder="New Username" autofocus><br>
+            <input type="text" name="user" id="user" value="<?php echo $_SESSION['username'] ?>" autofocus><br>
 
             <p> Email </p>
-            <input type="email" name="email" id="email" placeholder="New Email" required><br>
+            <input type="email" name="email" id="email" value="<?php echo $_SESSION['email'] ?>" required><br>
+            <!-- <div class="box">
+                <a class="button-password" href="#popup1">Change Password</a>
+            </div>
 
-            <p> Password </p>
-            <input type="password" name="password" id="password" placeholder="New Password" required><br>
+            <div id="popup1" class="overlay">
+                <div class="popup">
+                    <h2>Change Password</h2>
+                    <a class="close" href="#">&times;</a>
+                    <div class="content">
+                        <form method="post">
+                            <input type="password" name="old_pwd" id="old_pwd" placeholder="Old Password"><br>
+                            <input type="password" name="password" id="password" placeholder="New Password"><br>
+                            <button type="submit">
+                                Change
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div> -->
+        <p>
+            <input type="checkbox" class="checkbox" id="checkbox" name="notification" value="1" 
+                <?php
+                    if ($_SESSION['notification']) {
+                        echo "checked='checked'";
+                    } ?> />
+            <label for="checkbox">Email notification</label>
+        </p>
         <button type="submit">
             Change
         </button>
+
+        
     </form>
 
     <a href="/account/logout">Logout</a> <br>

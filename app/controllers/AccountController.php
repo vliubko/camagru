@@ -40,9 +40,14 @@ class AccountController extends Controller {
             header ("Location: /account/login");
         }
         else {
+            $this->pageData['user_data'] = $this->model->getUserData();
             $this->pageTpl = '/views/account/settings.tpl.php';
             $this->pageData['title'] = "Settings";
-
+            
+            if(!empty($_POST)) {
+                $message = $this->model->updateUserData();
+                $this->pageData['error'] = $message;
+            }
             $this->view->render($this->pageTpl, $this->pageData);
         }
     }
