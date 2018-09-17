@@ -11,7 +11,7 @@
     <h1 class="text-center login-title">Settings Page</h1>
     <img class="profile-img" src="/data/images/user.png">
 
-    <?php echo "Hello," . $_SESSION['name']; ?>
+    <?php echo "Hello, " . $_SESSION['name']; ?>
 
     <br>
 

@@ -33,7 +33,10 @@ class Routing {
         require_once MODEL_PATH . $modelName . ".php"; //IndexModel.php
         
         if(isset($route[2]) && $route[2] !='') {
-			$action = $route[2];
+            $action = $route[2];
+            if (strpos($action, '?') !== false) {
+                $action = substr($action, 0, strpos($action, "?"));
+            }
         }
         
         $controller = new $controllerName();

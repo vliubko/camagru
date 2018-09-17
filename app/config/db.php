@@ -15,6 +15,24 @@ class MyPDO extends PDO {
         }
         return substr($set, 0, -2); 
     }
+
+    public function getUserId() {
+        $sql = "SELECT id FROM user WHERE username = ?";
+        $user_id = MyPDO::run($sql, [$_SESSION['username']])->fetchColumn();
+        return $user_id;
+    }
+
+    public function getUserEmail() {
+        $sql = "SELECT id FROM user WHERE email = ?";
+        $email = MyPDO::run($sql, [$_POST['email']])->fetchColumn();
+        return $email;
+    }
+
+    public function findToken() {
+        $sql = "SELECT * FROM user WHERE tokenValidated = ?";
+        $user_data = MyPDO::run($sql, [$_GET['token']])->fetch();
+        return $user_data;
+    }
 }
 
 Class DB {

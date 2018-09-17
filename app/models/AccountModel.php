@@ -19,16 +19,16 @@ class AccountModel extends Model {
     }
 
     public function addNewUserToDB() {
-        $fields = array("username","name","email","password");
+        $fields = array("username","name","email","password","tokenValidated");
         $values = array(
-            $this->username,$this->name,$this->email,$this->password);
+            $this->username,$this->name,$this->email,$this->password,$this->token);
         $sql = "INSERT INTO user SET ".$this->db->pdoSet($fields,$values);
         $res = $this->db->run($sql);
         return ;
     }
 
     public function updateUserDb() {
-        $user_id = $this->getUserId();
+        $user_id = $this->db->getUserId();
 
         $fields = array("username","email","notification");
         $values = array(
@@ -100,11 +100,20 @@ class AccountModel extends Model {
             return $message;
         }
         $this->password = hash('whirlpool', $_POST['password']);
-        $this->addNewUserToDB();
         $this->sendMailConfirmation();
+        $this->addNewUserToDB();
         return "Succesful registration. <br>Email with activation link sent to ".$this->email;
     }
 
+    public function resetPassword() {
+        $email = $this->db->getUserEmail();
+
+        if (empty($email)) {
+            return "Email not found.";
+        }
+        
+        return "Succesful reset password. <br>Email with new password sent to ".$this->email;
+    }
 
     //TODO sendmail message.
     public function sendMailConfirmation() {
@@ -116,8 +125,9 @@ class AccountModel extends Model {
 			'Reply-To' => 'DevOps Camagru <vliubko@stundent.unit.ua>',
 			'MIME-Version' => '1.0',
 			'Content-Type' => 'text/html; charset=UTF-8',
-		);
-        $message = "Cool registration. Your token is: " . $this->token;
+        );
+        $address = $_SERVER['SERVER_NAME']."/account/verify?token=";
+        $message = "Cool registration. Please, follow this <a href=\"http://" . $address . $this->token . "\">link</a>"; 
 
         $error = mail($to, $subject, $message, $headers);
         if ($error != TRUE) {
@@ -135,6 +145,20 @@ class AccountModel extends Model {
         return $key . md5($this->email);
     }
 
+    public function verifyToken() {
+        $user_data = $this->db->findToken();
+        if (!empty($user_data)) {
+            $fields = array("validated");
+            $values = array(
+                1);
+            $sql = "UPDATE user SET ".$this->db->pdoSet($fields,$values)." WHERE id = ".$user_data['id'];
+            $res = $this->db->run($sql);
+            return $user_data['name'] .", you have verified your email" . $user_data['email'] . " succesfully!<br>
+            Wait 5 seconds for redirection";
+        }
+        return ;
+    }
+
     public function checkUserExist($username) {
         $sql = "SELECT * FROM user WHERE username = ?";
         $res = $this->db->run($sql, [$username])->fetchColumn();
@@ -146,13 +170,20 @@ class AccountModel extends Model {
         }
     }
 
+    public function checkUserValidated($user_data) {
+        if (!$user_data['validated']) {
+            return false;
+        }
+        return true;
+    }
+
     public function checkUserLogin() {
         $username = $_POST['login'];
 		$password = hash('whirlpool', $_POST['password']);
 		$name = "default";
         
         if (!$this->checkUserExist($username)) {
-            return false;
+            return "Wrong login or password";
         }
         $sql = "SELECT name FROM user WHERE username = ? AND password = ?";
         $res = $this->db->run($sql, [$username, $password])->fetchColumn();
@@ -160,19 +191,19 @@ class AccountModel extends Model {
 		if(!empty($res)) {
             $_SESSION['username'] = $username;
             $_SESSION['name'] = $res;
+
             $user_data = $this->getUserData();
+            if (!$this->checkUserValidated($user_data)) {
+                session_destroy();
+                return "Your account still not activated.";
+            }
+
             $_SESSION['email'] = $user_data['email'];
             $_SESSION['notification'] = $user_data['notification'];
 			header("Location: /account/settings");
 		} else {
-			return false;
+			return "Wrong login or password";
 		}
-    }
-
-    public function getUserId() {
-        $sql = "SELECT id FROM user WHERE username = ?";
-        $user_id = $this->db->run($sql, [$_SESSION['username']])->fetchColumn();
-        return $user_id;
     }
 
     public function getUserData() {

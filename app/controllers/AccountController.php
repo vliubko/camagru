@@ -23,9 +23,8 @@ class AccountController extends Controller {
             $this->pageData['title'] = "Camagru Login";
 
             if(!empty($_POST)) {
-                if (!$this->model->checkUserLogin()) {
-                    $this->pageData['error'] = "Wrong login or password";
-                }
+                $message = $this->model->checkUserLogin();
+                $this->pageData['error'] = $message;
             }
             $this->view->render($this->pageTpl, $this->pageData);
         }
@@ -53,17 +52,21 @@ class AccountController extends Controller {
     }
     
     public function recovery() {
-        if(!$this->model->checkSession()) {
+        if($this->model->checkSession()) {
             header ("Location: /account/login");
         }
         else {
             $this->pageTpl = '/views/account/recovery.tpl.php';
             $this->pageData['title'] = "Password Recovery";
 
+            if(!empty($_POST)) {
+                $message = $this->model->resetPassword();
+                $this->pageData['error'] = $message;
+            }
+
             $this->view->render($this->pageTpl, $this->pageData);
         }
     }
-
 
     public function register() {
         if(!$this->model->checkSession()) {
@@ -78,6 +81,26 @@ class AccountController extends Controller {
         }
         else {
             header ("Location: /account/settings");
+        }
+    }
+
+    public function verify() {
+        if($this->model->checkSession()) {
+            header ("Location: /account/login");
+        }
+        else {
+            $this->pageData['title'] = "Verify account";
+            $this->pageTpl = '/views/account/success_register.tpl.php';
+            
+            $message = $this->model->verifyToken();
+            if (empty($message)) {
+                header ("Location: /account/login");
+            } else {
+                $this->pageData['message'] = $message;
+                
+                $this->view->render($this->pageTpl, $this->pageData);
+            }
+            
         }
     }
 

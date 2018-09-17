@@ -14,10 +14,11 @@
     Registration page.
     <br>
 
-    <form id="register" method="post">
-            <?php if(!empty($pageData['error'])) :?>
+    <?php if(!empty($pageData['error'])) :?>
                 <p><?php echo $pageData['error']; ?></p>
-            <?php endif; ?>
+    <?php endif; ?>
+    
+    <form id="register" method="post">
             <input type="text" name="user" id="user" placeholder="Username" autofocus><br>
             <input type="email" name="email" id="email" placeholder="Email" required><br>
             <input type="text" name="name" id="name" placeholder="Full Name" required><br>
