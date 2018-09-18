@@ -11,6 +11,9 @@ class IndexController extends Controller {
 
     public function index() {
 		$this->pageData['title'] = "Camagru";
+		$this->pageData['photos'] = $this->model->showPhotos();
+		// print_r($this->pageData['photos']);
+
 		$this->view->render($this->pageTpl, $this->pageData);
 	}
 

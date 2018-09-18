@@ -38,6 +38,16 @@ class AccountModel extends Model {
         $res = $this->db->run($sql);
     }
 
+    public function deleteUserToken($user_id) {
+    
+        $fields = array("tokenValidated");
+        $values = array(
+            $this->token);
+        $sql = "UPDATE user SET ".$this->db->pdoSet($fields,$values)." WHERE id = ".$user_id;
+
+        $res = $this->db->run($sql);
+    }
+
     public function updateUserData() {
         $errors[] = AccountModel::validateUpdatingEmail($_POST['email']);
         $errors[] = AccountModel::validateUpdatingUsername($_POST['user']);
@@ -119,7 +129,7 @@ class AccountModel extends Model {
     public function sendMailConfirmation() {
         $this->token = $this->tokenGenerate();
         $to = $this->email;
-        $subject = 'Activation link';
+        $subject = 'Activation link Camagru';
         $headers = array(
 			'From' => 'DevOps Camagru <vliubko@stundent.unit.ua>',
 			'Reply-To' => 'DevOps Camagru <vliubko@stundent.unit.ua>',
@@ -127,7 +137,7 @@ class AccountModel extends Model {
 			'Content-Type' => 'text/html; charset=UTF-8',
         );
         $address = $_SERVER['SERVER_NAME']."/account/verify?token=";
-        $message = "Cool registration. Please, follow this <a href=\"http://" . $address . $this->token . "\">link</a>"; 
+        $message = "Congrats with registration! <br> Your username: " . $this->username . "<br><br>Please, follow this <a href=\"http://" . $address . $this->token . "\">link</a>"; 
 
         $error = mail($to, $subject, $message, $headers);
         if ($error != TRUE) {
@@ -153,7 +163,9 @@ class AccountModel extends Model {
                 1);
             $sql = "UPDATE user SET ".$this->db->pdoSet($fields,$values)." WHERE id = ".$user_data['id'];
             $res = $this->db->run($sql);
-            return $user_data['name'] .", you have verified your email" . $user_data['email'] . " succesfully!<br>
+            $this->token = NULL;
+            $this->deleteUserToken($user_data['id']);
+            return $user_data['name'] .", you have verified your email " . $user_data['email'] . " succesfully!<br>
             Wait 5 seconds for redirection";
         }
         return ;
@@ -200,7 +212,7 @@ class AccountModel extends Model {
 
             $_SESSION['email'] = $user_data['email'];
             $_SESSION['notification'] = $user_data['notification'];
-			header("Location: /account/settings");
+			header("Location: /");
 		} else {
 			return "Wrong login or password";
 		}

@@ -33,6 +33,12 @@ class MyPDO extends PDO {
         $user_data = MyPDO::run($sql, [$_GET['token']])->fetch();
         return $user_data;
     }
+
+    public function getAllPhotos() {
+        $sql = "SELECT * FROM photo";
+        $photos = MyPDO::run($sql)->fetchAll();
+        return $photos;
+    }
 }
 
 Class DB {

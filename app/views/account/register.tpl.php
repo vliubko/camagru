@@ -18,6 +18,8 @@
                 <p><?php echo $pageData['error']; ?></p>
     <?php endif; ?>
     
+    <?php if(empty($pageData['error']) || strpos($pageData['error'], "Succesful") === FALSE) : ?>
+    
     <form id="register" method="post">
             <input type="text" name="user" id="user" placeholder="Username" autofocus><br>
             <input type="email" name="email" id="email" placeholder="Email" required><br>
@@ -27,6 +29,8 @@
             Register
         </button>
     </form>
+
+    <?php endif; ?>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/js/login_script.js"></script>

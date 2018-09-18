@@ -94,7 +94,7 @@ class AccountController extends Controller {
             
             $message = $this->model->verifyToken();
             if (empty($message)) {
-                header ("Location: /account/login");
+                header ("Location: /");
             } else {
                 $this->pageData['message'] = $message;
                 
