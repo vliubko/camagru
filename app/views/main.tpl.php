@@ -25,9 +25,11 @@
     <?php if(empty($pageData['photos'])) {
         echo "<br>No photos in database!" ;
     } else {
-        foreach ($pageData['photos'] as $photo) {
-            echo "<img border=5 height=300px src=".$photo['url'].">";
-            echo "<img id=\"like-but\" height=20px src=\"http://pngimg.com/uploads/like/like_PNG55.png\"><br>";
+        foreach ($pageData['photos'] as $key => $photo) {
+            echo "<img border=5 height=300px src=".$photo['url']."><br>";
+            echo $photo['username']."<br>";
+            echo $photo['likes']. " ";
+            echo "<img class=\"likes\" id=\"like-but-". $photo['id']."\"height=20px src=\"/data/images/like.png\"><br>";
         }
     }
     ?>

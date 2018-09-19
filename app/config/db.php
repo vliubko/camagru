@@ -35,10 +35,20 @@ class MyPDO extends PDO {
     }
 
     public function getAllPhotos() {
-        $sql = "SELECT * FROM photo";
+        $sql = "SELECT COUNT(like.id) as likes, photo.id, photo.url, user.username 
+                FROM camagru.photo 
+                LEFT JOIN camagru.like ON photo.id = like.photo
+                INNER JOIN camagru.user ON photo.user = user.id
+                GROUP BY photo.id, photo.url, user.username";
         $photos = MyPDO::run($sql)->fetchAll();
         return $photos;
     }
+
+    // public function countLikes($photo_id) {
+    //     $sql = "SELECT COUNT(*) FROM camagru.like WHERE photo = ?";
+    //     $likes = MyPDO::run($sql, [$photo_id])->fetchColumn();
+    //     return $likes;
+    // }
 }
 
 Class DB {
