@@ -11,13 +11,22 @@ class LikeController extends Controller {
 
     public function index() {
 
-        if(!$_POST['like-id']) {
+        if (!isset($_SESSION['username'])) {
+            return;
+        }
+
+        if(!$_POST['photo-id']) {
             header("Location: /public/404.html");
             return;
         }
 
-        echo "Php request OK!";
+        $arr = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
+        $arr['like-pressed'] = $this->model->likeStatus();
+        
+        header('Content-type: application/json');
+        echo json_encode($arr);
     }
+
 
 }
 

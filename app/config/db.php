@@ -1,6 +1,7 @@
 <?php
 
 class MyPDO extends PDO {
+
     public function run($sql, $args = NULL) {
         $stmt = $this->prepare($sql);
         $stmt->execute($args);
@@ -13,7 +14,22 @@ class MyPDO extends PDO {
         foreach ($allFields as $key => $value) {
             $set.="`".str_replace("`","``",$key)."`". "=\"$value\", ";
         }
-        return substr($set, 0, -2); 
+        return substr($set, 0, -2);
+    }
+
+    function pdoSetNoQuotes($fields, $values) {
+        $set = '';
+        $allFields = array_combine($fields, $values);
+        foreach ($allFields as $key => $value) {
+            $set.="`".str_replace("`","``",$key)."`". "=$value, ";
+        }
+        return substr($set, 0, -2);
+    }
+
+    function pdoDelete($table_name, $id) {
+        $sql = "DELETE FROM " . "`" . $table_name . "`" . " WHERE `id` = ?";
+        $status = MyPDO::run($sql, [$id])->fetch();
+        return $status;
     }
 
     public function getUserId() {
@@ -35,13 +51,29 @@ class MyPDO extends PDO {
     }
 
     public function getAllPhotos() {
-        $sql = "SELECT COUNT(like.id) as likes, photo.id, photo.url, user.username 
+        $sql = "SELECT COUNT(like.id) as likes, photo.id, photo.url, user.username, user.id as user_id, photo.createdAt
                 FROM camagru.photo 
                 LEFT JOIN camagru.like ON photo.id = like.photo
                 INNER JOIN camagru.user ON photo.user = user.id
-                GROUP BY photo.id, photo.url, user.username";
+                GROUP BY photo.id, photo.url, user.username, user.id, photo.createdAt";
         $photos = MyPDO::run($sql)->fetchAll();
         return $photos;
+    }
+
+    public function checkLikeStatus($user_id, $photo_id) {
+        $sql = "SELECT id FROM camagru.like WHERE user = ? AND photo = ?";
+        $status = MyPDO::run($sql, [$user_id, $photo_id])->fetchColumn();
+        return $status;
+    }
+
+    public function getComments($photo_id) {
+        $sql = "SELECT user.username, comment.message, comment.createdAt 
+        FROM camagru.comment
+        LEFT JOIN user on comment.user = user.id
+        WHERE comment.photo = ?";
+        $comments = MyPDO::run($sql, [$photo_id])->fetchAll();
+        var_dump($comments);
+        return $comments;
     }
 
     // public function countLikes($photo_id) {

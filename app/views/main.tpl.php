@@ -5,6 +5,7 @@
 	<title><?php echo $pageData['title']; ?></title>
 	<meta name="vieport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 
 <body>
@@ -25,12 +26,39 @@
     <?php if(empty($pageData['photos'])) {
         echo "<br>No photos in database!" ;
     } else {
-        foreach ($pageData['photos'] as $key => $photo) {
-            echo "<img border=5 height=300px src=".$photo['url']."><br>";
-            echo $photo['username']."<br>";
-            echo $photo['likes']. " ";
-            echo "<img class=\"likes\" id=\"like-but-". $photo['id']."\"height=20px src=\"/data/images/like.png\"><br>";
+            echo "<div class=\"photos\">";
+        foreach ($pageData['photos'] as $photo) {
+                echo "<div class=\"photo\" id=\"photo-". $photo['id']. "\">\n";
+                echo "<img height=20px src=\"/data/images/user-shape.png\">";
+                echo " " . $photo['username']."<br>";
+                echo "<img class=\"img-photo\" height=300px src=".$photo['url']."><br>\n";
+                echo "<div class=\"like\">";
+                if (!empty($photo['like_status'])) {
+                    echo "<img class=\"like-img\" height=20px src=\"/data/images/like_full.png\">";
+                } else {
+                    echo "<img class=\"like-img\" height=20px src=\"/data/images/like.png\">";
+                }
+                echo "</div>";
+                echo "<div class=\"number-likes\">" . $photo['likes'] . "</div>";
+
+                foreach ($photo['comments'] as $comment) {
+                    echo "<div class=\"comment\">";
+                    echo $comment['username'] . " ";
+                    echo $comment['message'];
+                    echo "</div>";
+                }
+
+                echo "<div class=\"text-date\">". $photo['timeAgo'] . "</div>";
+                echo "<hr>";
+                echo "<form id=\"comment_form\">";
+                echo "<input
+                onkeypress=\"insertComment(event, '', '1')\"
+                id=\"comment_text_1\" placeholder=\"Enter a comment...\" class=\"comment_text\"></input>";
+                echo "</form>";
+                echo "<button type=\"submit\" form=\"comment_form\" value=\"Submit\">Add</button>";
+                echo "\n</div>\n";
         }
+            echo "\n</div>\n";
     }
     ?>
 
