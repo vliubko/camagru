@@ -6,17 +6,21 @@
     padding: 10px;
   }
 
-  .photos-solo {
-    display: inline-flex;
-    margin: 0 auto;
-  }
-
   .photo {
     border-style: solid;
     border-color: rgb(121, 114, 112);
     border-width: 2px;
     margin-right: 10px;
     padding: 10px;
+  }
+
+  .comment-img-div {
+    display: inline;
+    margin-left: 10px;
+  }
+
+  .comment-img {
+    
   }
 
   .img-photo {
@@ -33,4 +37,5 @@
 
   .like {
     display: inline;
+    margin-left: 5px;
   }

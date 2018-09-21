@@ -4,14 +4,13 @@ const likeButton = document.getElementsByClassName('photo');
 for (i=0; i<likeButton.length; i++) {
     likeButton[i].addEventListener('click', function (e) {
         if (e.target.className === 'like-img' || e.target.className === 'img-photo') {
-            sendRequest(this)
+            sendRequestLike(this)
         }
-        e.preventDefault()
+        // e.preventDefault()
     })
 };
 
-
-function sendRequest(elem) {
+function sendRequestLike(elem) {
     let XHR = new XMLHttpRequest()
     let likeData = new FormData();
 
@@ -31,7 +30,7 @@ function sendRequest(elem) {
         resp_json = JSON.parse(event.target.responseText);
         checkLikeIsPressed(resp_json, elem);
     })
-    XHR.open("POST", 'like');
+    XHR.open("POST", '/like');
     XHR.send(likeData)
   }
 

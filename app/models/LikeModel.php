@@ -5,7 +5,7 @@ class LikeModel extends Model {
     public function likeStatus() {
         $user_id = $this->db->getUserId();
         $like_id = $this->db->checkLikeStatus($user_id, $_POST['photo-id']);
-
+        
         if (empty($like_id)) {
             $this->newLike($user_id);
             return "false";

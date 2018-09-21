@@ -10,7 +10,7 @@ class LikeController extends Controller {
     }
 
     public function index() {
-
+        
         if (!isset($_SESSION['username'])) {
             return;
         }
@@ -26,7 +26,6 @@ class LikeController extends Controller {
         header('Content-type: application/json');
         echo json_encode($arr);
     }
-
 
 }
 

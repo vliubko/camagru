@@ -25,7 +25,7 @@
 
 <?php
     $photo = $pageData['photo'];
-    echo "<div class=\"photos-solo\">";
+    echo "<div class=\"photos\">";
     echo "<div class=\"photo\" id=\"photo-". $photo['id']. "\">\n";
     echo "<img height=20px src=\"/data/images/user-shape.png\">";
     echo " " . $photo['username']."<br>";
