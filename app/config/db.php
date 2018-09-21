@@ -60,6 +60,17 @@ class MyPDO extends PDO {
         return $photos;
     }
 
+    public function getPhoto($photo_id) {
+        $sql = "SELECT COUNT(like.id) as likes, photo.id, photo.url, user.username, user.id as user_id, photo.createdAt 
+                FROM `photo`
+                LEFT JOIN `like` ON photo.id = like.photo 
+                INNER JOIN `user` ON photo.user = user.id
+                WHERE photo.id = ?
+                GROUP BY photo.id, photo.url, user.username, user.id, photo.createdAt";
+        $photo = MyPDO::run($sql, [$photo_id])->fetch();
+        return $photo;
+    }
+
     public function checkLikeStatus($user_id, $photo_id) {
         $sql = "SELECT id FROM camagru.like WHERE user = ? AND photo = ?";
         $status = MyPDO::run($sql, [$user_id, $photo_id])->fetchColumn();
@@ -72,7 +83,6 @@ class MyPDO extends PDO {
         LEFT JOIN user on comment.user = user.id
         WHERE comment.photo = ?";
         $comments = MyPDO::run($sql, [$photo_id])->fetchAll();
-        var_dump($comments);
         return $comments;
     }
 

@@ -4,10 +4,10 @@ require_once MODEL_PATH. 'AccountModel.php';
 
 class PhotoController extends Controller {
 
-    private $pageTpl = '/views/account/photo.tpl.php';
+    private $pageTpl = '/views/account/add_photo.tpl.php';
 
 	public function __construct() {
-		$this->model = new AccountModel();
+		$this->model = new PhotoModel();
         $this->view = new View();
 	}
 
@@ -31,4 +31,16 @@ class PhotoController extends Controller {
         }
     }
     
+    public function showPhoto($id) {
+        $this->pageData['title'] = "Camagru";
+        $this->pageTpl = '/views/account/show_photo.tpl.php';
+        $this->pageData['photo'] = $this->model->showPhoto($id);
+        
+        
+        if (empty($this->pageData['photo'])) {
+            header("Location: /public/404.html");
+            return ;
+        }
+		$this->view->render($this->pageTpl, $this->pageData);
+    }
 }

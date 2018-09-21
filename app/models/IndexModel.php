@@ -3,14 +3,14 @@
 class IndexModel extends Model {
     public function showPhotos() {
         $photos = $this->db->getAllPhotos();
-        if (isset($_SESSION['username'])) {
-            $user_id = $this->db->getUserId();
-            foreach ($photos as $key => $photo) {
+        $user_id = $this->db->getUserId();
+        foreach ($photos as $key => $photo) {
+            if (isset($_SESSION['username'])) {
                 $status = $this->db->checkLikeStatus($user_id, $photo['id']);
                 $photos[$key]["like_status"] = $status;
-                $photos[$key]["timeAgo"] = $this->diffTime($photos[$key]["createdAt"]);
-                $photos[$key]["comments"] = $this->db->getComments($photo['id']);
             }
+            $photos[$key]["timeAgo"] = $this->diffTime($photos[$key]["createdAt"]);
+            $photos[$key]["comments"] = $this->db->getComments($photo['id']);
         }
         // var_dump($photos);
         return $photos;

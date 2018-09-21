@@ -6,6 +6,11 @@
     padding: 10px;
   }
 
+  .photos-solo {
+    display: inline-flex;
+    margin: 0 auto;
+  }
+
   .photo {
     border-style: solid;
     border-color: rgb(121, 114, 112);

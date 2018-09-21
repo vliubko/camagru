@@ -40,6 +40,11 @@ class Routing {
         }
         
         $controller = new $controllerName();
+        
+        if ($controllerName == "PhotoController" && $action != "index") {
+            $response = $controller->showPhoto($action);
+            return ;
+        }
         if (!method_exists($controller, $action)) {
             header("Location: /public/404.html");
             return;
