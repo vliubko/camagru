@@ -12,6 +12,7 @@ class CommentController extends Controller {
     public function index() {
         
         if (!isset($_SESSION['username'])) {
+            echo "no session";
             return;
         }
 

@@ -46,7 +46,7 @@ function sendRequestComment(elem) {
     commentData.append('photo-id', photoId)
     commentData.append('comment', message)
 
-    XHR.addEventListener("submit", function(event) {
+    XHR.addEventListener("load", function(event) {
         // console.log("XHR loaded")
         // console.log("Like id is:", photoId)
         console.log('answer = > ', event.target.responseText)
