@@ -16,9 +16,13 @@ form[0].addEventListener('submit', function(evt){
     if (test.value == '') {
         return ;
     }
-    sendRequestComment(test);
-    createNewDivComment();
+    let error = sendRequestComment(test);
     test.value = '';
+    if (error == '') {
+        createNewDivComment();
+    } else {
+        window.location="/account/login"
+    }
 
     // console.log(form[0]);
     // console.log("form submitted!");
@@ -50,6 +54,9 @@ function sendRequestComment(elem) {
         // console.log("XHR loaded")
         // console.log("Like id is:", photoId)
         console.log('answer = > ', event.target.responseText)
+        if (event.target.responseText != '') {
+            return "error"
+        }
         // resp_json = JSON.parse(event.target.responseText);
         // checkLikeIsPressed(resp_json, elem);
     })
