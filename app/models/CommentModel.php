@@ -9,7 +9,6 @@ class CommentModel extends Model {
 
         $this->newComment($user_id, $photo_id , $message);
         
-        echo "php is ok!";
     }
 
     public function newComment($user_id, $photo_id , $message) {

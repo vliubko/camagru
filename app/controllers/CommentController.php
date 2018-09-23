@@ -12,7 +12,9 @@ class CommentController extends Controller {
     public function index() {
         
         if (!isset($_SESSION['username'])) {
-            echo "no session";
+            $arr['error'] = "no session";
+            header('Content-type: application/json');
+            echo json_encode($arr);
             return;
         }
 
@@ -21,11 +23,10 @@ class CommentController extends Controller {
             return;
         }
         
-        // $arr = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
         $this->model->addNewComment();
-        
-        //header('Content-type: application/json');
-        //echo json_encode($arr);
+        $arr['username'] = $_SESSION['username'];
+        header('Content-type: application/json');
+        echo json_encode($arr);
     }
 
 }
