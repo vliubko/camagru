@@ -22,9 +22,13 @@ class CommentController extends Controller {
             header("Location: /public/404.html");
             return;
         }
+
+        $author = $_SESSION['username'];
         
         $this->model->addNewComment();
-        $arr['username'] = $_SESSION['username'];
+        $this->model->commentMailNotification($author);
+        
+        $arr['username'] = $author;
         header('Content-type: application/json');
         echo json_encode($arr);
     }

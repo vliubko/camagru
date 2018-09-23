@@ -38,9 +38,21 @@ class MyPDO extends PDO {
         return $user_id;
     }
 
-    public function getUserEmail() {
+    public function getUserIdByPhotoId($photo_id) {
+        $sql = "SELECT user FROM photo WHERE id = ?";
+        $user_id = MyPDO::run($sql, [$photo_id])->fetchColumn();
+        return $user_id;
+    }
+
+    public function getUserDataById($user_id) {
+        $sql = "SELECT * FROM user WHERE id = ?";
+        $user_data = MyPDO::run($sql, [$user_id])->fetch();
+        return $user_data;
+    }
+
+    public function getUserIdByEmail($email) {
         $sql = "SELECT id FROM user WHERE email = ?";
-        $email = MyPDO::run($sql, [$_POST['email']])->fetchColumn();
+        $email = MyPDO::run($sql, [$email])->fetchColumn();
         return $email;
     }
 

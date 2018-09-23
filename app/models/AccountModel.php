@@ -116,7 +116,7 @@ class AccountModel extends Model {
     }
 
     public function resetPassword() {
-        $email = $this->db->getUserEmail();
+        $email = $this->db->getUserIdByEmail($_POST['email']);
 
         if (empty($email)) {
             return "Email not found.";
@@ -290,6 +290,7 @@ class AccountModel extends Model {
         }
         return;
     }
+
 }
 
 ?>
