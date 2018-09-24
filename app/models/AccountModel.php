@@ -116,13 +116,60 @@ class AccountModel extends Model {
     }
 
     public function resetPassword() {
-        $email = $this->db->getUserIdByEmail($_POST['email']);
+        $user_id = $this->db->getUserIdByEmail($_POST['email']);
+        $user_data = $this->db->getUserDataById($user_id);
 
-        if (empty($email)) {
+        if (empty($user_id)) {
             return "Email not found.";
+        } else {
+            $password = $this->generateNewPassword();
+            $this->setNewPassword($user_id, hash('whirlpool', $password));
+            $this->sendMailNewPassword($user_data, $password);
         }
-        
-        return "Succesful reset password. <br>Email with new password sent to ".$this->email;
+        return "Succesful reset password. <br>Email with new password sent to ".$_POST['email'];
+    }
+
+    public function sendMailNewPassword($user_data, $password) {
+        $to = $user_data['email'];
+        $subject = 'Password reset DevOps Camagru';
+        $headers = array(
+			'From' => 'DevOps Camagru <vliubko@stundent.unit.ua>',
+			'Reply-To' => 'DevOps Camagru <vliubko@stundent.unit.ua>',
+			'MIME-Version' => '1.0',
+			'Content-Type' => 'text/html; charset=UTF-8',
+        );
+        $src = "http://" . $_SERVER['SERVER_NAME'] . "/account/login";
+
+        $first_row = $user_data['username'] . " , you have requested password reset. <br>";
+        $second_row = "Your new password is: " . $password . "<br>" ;
+        $thid_row = "Please, use it for login ";
+        $fourth_row = "<a href=\"" . $src . "\"> >> here <<</a>";
+    
+        $message = $first_row . $second_row . $thid_row . $fourth_row;
+
+        $error = mail($to, $subject, $message, $headers);
+        if ($error != TRUE) {
+            echo "Mail not send. Something went wrong.";
+        }
+    }
+
+    public function setNewPassword($user_id, $password) {
+        $fields = array("password");
+        $values = array($password);
+        $sql = "UPDATE `user` SET ".$this->db->pdoSet($fields,$values)."WHERE id = ?";
+        $this->db->run($sql, [$user_id]);
+        return ;
+    }
+
+    public function generateNewPassword() {
+        $key = "";
+        $alpha = "abcdefghijklmnpqrstuvwxyABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        srand((double)microtime() * 1000000);
+        for ($i = 0; $i < 5; $i++) {
+            $key .= $alpha[rand() % strlen($alpha)];
+        }
+        $newPassword = $key . substr(md5($_POST['email']), 0, 5);
+        return $newPassword;
     }
 
     //TODO sendmail message.

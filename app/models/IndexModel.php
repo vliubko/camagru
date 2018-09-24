@@ -11,8 +11,8 @@ class IndexModel extends Model {
             }
             $photos[$key]["timeAgo"] = $this->diffTime($photos[$key]["createdAt"]);
             $photos[$key]["comments"] = $this->db->getComments($photo['id']);
+            $photos[$key]["comments"] = $this->getCommentDeleteButton($photos[$key]["comments"]);
         }
-        // var_dump($photos);
         return $photos;
     }
 
@@ -43,6 +43,19 @@ class IndexModel extends Model {
     
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' ago' : 'just now';
+    }
+
+    public function getCommentDeleteButton($comments) {
+
+        $current_user_id = $this->db->getUserId();
+
+        foreach ($comments as $key => $comment) {
+            $owner_user_id = $this->db->getUserIdByCommentId($comment['id']);
+            if ($current_user_id == $owner_user_id) {
+                $comments[$key]["showDelete"] = "true";
+            }
+        }
+        return $comments;
     }
  
 }

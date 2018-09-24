@@ -54,9 +54,18 @@ class CommentModel extends Model {
     }
 
 
-    // public function deleteLike($like_id) {
-    //     $deleted = $this->db->pdoDelete("like", $like_id);
-    // }
+    public function deleteComment($comment_id) {
+        $deleted = $this->db->pdoDelete("comment", $comment_id);
+    }
+
+    public function checkUserAccess($comment_id) {
+        $current_user_id = $this->db->getUserId();
+        $owner_user_id = $this->db->getUserIdByCommentId($comment_id);
+        if ($current_user_id == $owner_user_id) {
+            return true;
+        }
+        return ;
+    }
 
 }
 ?>

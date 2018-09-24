@@ -4,7 +4,7 @@ require_once MODEL_PATH. 'AccountModel.php';
 
 class PhotoController extends Controller {
 
-    private $pageTpl = '/views/account/add_photo.tpl.php';
+    private $pageTpl = '/views/photo/add_photo.tpl.php';
 
 	public function __construct() {
 		$this->model = new PhotoModel();
@@ -33,7 +33,7 @@ class PhotoController extends Controller {
     
     public function showPhoto($id) {
         $this->pageData['title'] = "Camagru";
-        $this->pageTpl = '/views/account/show_photo.tpl.php';
+        $this->pageTpl = '/views/photo/show_photo.tpl.php';
         $this->pageData['photo'] = $this->model->showPhoto($id);
         
         

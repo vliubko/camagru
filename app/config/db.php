@@ -50,10 +50,16 @@ class MyPDO extends PDO {
         return $user_data;
     }
 
+    public function getUserIdByCommentId($comment_id) {
+        $sql = "SELECT user FROM comment WHERE id = ?";
+        $user_id = MyPDO::run($sql, [$comment_id])->fetchColumn();
+        return $user_id;
+    }
+
     public function getUserIdByEmail($email) {
         $sql = "SELECT id FROM user WHERE email = ?";
-        $email = MyPDO::run($sql, [$email])->fetchColumn();
-        return $email;
+        $user_id = MyPDO::run($sql, [$email])->fetchColumn();
+        return $user_id;
     }
 
     public function findToken() {
@@ -90,7 +96,7 @@ class MyPDO extends PDO {
     }
 
     public function getComments($photo_id) {
-        $sql = "SELECT user.username, comment.message, comment.createdAt 
+        $sql = "SELECT comment.id, user.username, comment.message, comment.createdAt 
         FROM camagru.comment
         LEFT JOIN user on comment.user = user.id
         WHERE comment.photo = ?";

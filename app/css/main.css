@@ -1,4 +1,4 @@
-  /* photos div */
+  /* photos div */  
   .photos {
     margin-right: 10px;
     text-align: left;
@@ -19,6 +19,9 @@
     margin-left: 10px;
   }
 
+  /* .comment {
+    display: inline-block;
+  } */
   .comment-img {
     
   }
@@ -41,4 +44,27 @@
   .like {
     display: inline;
     margin-left: 5px;
+  }
+  
+  .close-thik:after {
+    content: '✖'; /* UTF-8 symbol */
+    position: relative;
+    float: right;
+    text-decoration:none;
+  }
+
+  .close-thik:link {
+    color: rgb(77, 55, 55);
+  }
+  
+  .close-thik:visited {
+    color: rgb(77, 55, 55);
+  }
+  
+  .close-thik:hover {
+    color: rgb(77, 55, 55);
+  }
+  
+  .close-thik:active {
+    color: rgb(77, 55, 55);
   }

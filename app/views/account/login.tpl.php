@@ -5,9 +5,13 @@
 	<title><?php echo $pageData['title']; ?></title>
 	<meta name="vieport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/header.css">
 </head>
 
 <body>
+
+    <?php include_once ROOT. "/views/header.php" ; ?>
+
     <h1 class="text-center login-title">Login page Camagru</h1>
     <img class="profile-img" src="/data/images/user.png" alt="">
         <form class="form-signin" id="form-signin" method="post">

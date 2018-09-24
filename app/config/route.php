@@ -45,6 +45,7 @@ class Routing {
             $response = $controller->showPhoto($action);
             return ;
         }
+
         if (!method_exists($controller, $action)) {
             header("Location: /public/404.html");
             return;

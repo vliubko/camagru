@@ -6,22 +6,11 @@
 	<meta name="vieport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/login.css">
     <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/header.css">
 </head>
 
 <body>
-    <h1 class="text-center login-title">DevOps Camagru</h1>
-    <div id="buttons">
-        <?php if (isset($_SESSION['username'])) {
-                echo "Hello, " . $_SESSION['username'] . "<br>";
-                echo "<a href=\"/account/settings\" class=\"btn blue\">Settings</a> <br>";
-                echo "<a href=\"/account/logout\" class=\"btn red\">Logout</a> <br>";
-                echo "<a href=\"/photo\" class=\"btn green\">Add photo</a>";
-        } else {
-            echo "<a href=\"/account/login\" class=\"btn blue\">Login</a> <br>";
-            echo "<a href=\"/account/register\" class=\"btn blue\">Create an account</a> <br>";
-        }?>
-    </div>
-    <br>
+    <?php include_once ROOT. "/views/header.php" ; ?>
 
     <?php if(empty($pageData['photos'])) {
         echo "<br>No photos in database!" ;
@@ -53,11 +42,20 @@
                     echo "</div>";
 
                     echo "<div class=\"comments\" id=\"comments_div_" . $photo['id'] . "\">";
-                        foreach ($photo['comments'] as $comment) {
-                            echo "<div class=\"comment\">";
+                        foreach ($photo['comments'] as $key => $comment) {
+                            echo "<div class=\"comment-" . $comment['id'] .  "\">";
                                 echo $comment['username'] . " ";
                                 echo $comment['message'];
+                                if ($comment['showDelete']) {
+                                    echo "<a href=\"/comment/delete/" . $comment['id'] . "\" class=\"close-thik\"></a>";
+                                }
                             echo "</div>";
+                            if ($key > 1) {
+                                echo "<div class=\"viewAllComments-div-" . $photo['id'] .  "\">";
+                                    echo "<a href=/photo/" . $photo['id'] . ">View all comments</a>";
+                                echo "</div>";
+                                break ;
+                            }
                         }
                     echo "</div>";
 

@@ -1,0 +1,20 @@
+#header-div {
+    display: inline-flex;
+    width: 100%;
+    position: relative;
+}
+
+#devops-logo-img {
+    height: 200px;
+}
+
+#logo-div {
+    display: inline-block;
+}
+
+#buttons-div {
+    display: inline-block;
+    position: absolute;
+    margin-left: 80%;
+}
+

@@ -5,12 +5,12 @@
 	<title><?php echo $pageData['title']; ?></title>
 	<meta name="vieport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="/css/header.css">
 </head>
 
 <body>
     <h1 class="text-center login-title">Registration Camagru</h1>
 
-    
     <p>
         <?php echo $pageData['message']; ?>
     </p>
