@@ -5,7 +5,7 @@ class CommentModel extends Model {
     public function addNewComment() {
         $user_id = $this->db->getUserId();
         $photo_id = $_POST['photo-id'];
-        $message = $_POST['comment'];
+        $message = htmlspecialchars($_POST['comment']);
 
         $this->newComment($user_id, $photo_id , $message);
     }

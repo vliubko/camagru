@@ -19,9 +19,22 @@ for (i=0; i<newCommentDiv.length; i++) {
     })
 }
 
+function htmlspecialchars(str) {
+    if (typeof(str) == "string") {
+     str = str.replace(/&/g, "&amp;"); /* must do &amp; first */
+     str = str.replace(/"/g, "\"");
+     str = str.replace(/'/g, "&#039;");
+     str = str.replace(/</g, "<");
+     str = str.replace(/>/g, ">");
+     }
+    return str;
+}
+
 function createNewDivComment(author, message, photoId) {
     newDiv = document.createElement('div');
+    console.log('message: ', message);
     newDiv.innerHTML = author + ' ' + message;
+    console.log(newDiv);
 
     fullId = 'comments_div_' + photoId;
     commentsDiv = document.getElementById(fullId)
@@ -57,16 +70,16 @@ function sendRequestComment(elem) {
     var fulllId = elem.getAttribute('id');
     var photoId = fulllId.substr(13);
 
-    let message = elem.value
+    let message = htmlspecialchars(elem.value)
 
     let viewAllComments = document.getElementsByClassName("viewAllComments-div-" + photoId)[0];
 
     commentData.append('photo-id', photoId)
     commentData.append('comment', message)
+    console.log(message);
 
     XHR.addEventListener("load", function(event) {
         resp_json = JSON.parse(event.target.responseText);
-        console.log(viewAllComments);
         if (resp_json['error']) {
             window.location="/account/login"
         } else if (nCount > 1) {
