@@ -1,14 +1,5 @@
 <?php
 
-/*
-** Класс маршрутизации
-** localhost/account
-** localhost/account/login
-** localhost/account/register
-** localhost/account/settings
-** localhost/account/logout
-*/
-
 class Routing {
     public static function buildRoute() {
         /*Контроллер и action по умолчанию*/

@@ -1,0 +1,8 @@
+#results {
+    /* display: none; */
+    position: absolute;
+}
+
+#my_camera {
+    z-index: 20;
+}

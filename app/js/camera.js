@@ -1,48 +1,60 @@
-'use strict';
-
-// Put variables in global scope to make them available to the browser console.
-const constraints = window.constraints = {
-  audio: false,
-  video: true
-};
-
-function handleSuccess(stream) {
-  const video = document.querySelector('video');
-  const videoTracks = stream.getVideoTracks();
-  console.log('Got stream with constraints:', constraints);
-  console.log(`Using video device: ${videoTracks[0].label}`);
-  window.stream = stream; // make variable available to browser console
-  video.srcObject = stream;
+function removeElement(elem) {
+  return elem.parentNode.removeChild(elem);
 }
 
-function handleError(error) {
-  if (error.name === 'ConstraintNotSatisfiedError') {
-    let v = constraints.video;
-    errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
-  } else if (error.name === 'PermissionDeniedError') {
-    errorMsg('Permissions have not been granted to use your camera and ' +
-      'microphone, you need to allow the page access to your devices in ' +
-      'order for the demo to work.');
-  }
-  errorMsg(`getUserMedia error: ${error.name}`, error);
+// preload shutter audio clip
+var shutter = new Audio();
+shutter.autoplay = false;
+shutter.src = navigator.userAgent.match(/Firefox/) ? '/data/sounds/shutter.ogg' : '/data/sounds/shutter.mp3';
+
+const cameraButton = document.getElementById('camera-button');
+const cameraButtonTakeSnap = document.getElementById('camera-button-take-snap');
+const resultsDiv = document.getElementById('results');
+
+Webcam.set({
+  // live preview size
+  width: 480,
+  height: 360,
+  
+  // // device capture size
+  // dest_width: 640,
+  // dest_height: 480,
+  
+  // final cropped size
+  crop_width: 360,
+  crop_height: 360,
+  
+  // format and quality
+  image_format: 'jpeg',
+  jpeg_quality: 100
+});
+
+function attach_cam() {
+  cameraButton.style.visibility = "none";
+  cameraButtonTakeSnap.style.visibility = "visible";
 }
 
-function errorMsg(msg, error) {
-  const errorElement = document.querySelector('#errorMsg');
-  errorElement.innerHTML += `<p>${msg}</p>`;
-  if (typeof error !== 'undefined') {
-    console.error(error);
-  }
+Webcam.attach( '#my_camera' );
+
+function hide_results() {
+  cameraButton.style.visibility = "visible";
+  cameraButtonTakeSnap.style.visibility = "none";
 }
 
-async function init(e) {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleSuccess(stream);
-    e.target.disabled = true;
-  } catch (e) {
-    handleError(e);
-  }
-}
+function take_snapshot() {
+  // take snapshot and get image data
+  Webcam.snap( function(data_uri) {
 
-document.querySelector('#showVideo').addEventListener('click', e => init(e));
+    if (resultsDiv.style.display == "none") {
+      resultsDiv.style.display = "block";
+      resultsDiv.innerHTML = 
+      '<img src="'+data_uri+'"/>' +
+      '<button class=\"btn blue\">Stickers</button>' +
+      '<button class=\"btn green\">Upload now</button>';
+    } else {
+      resultsDiv.style.display = "none";
+      hide_results();
+    }
+  });
+
+}

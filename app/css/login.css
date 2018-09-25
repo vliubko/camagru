@@ -129,7 +129,7 @@
   .popup .close:hover {
     color: #06D85F;
   }
-  .popup .content {
+  .popup .password-div {
     max-height: 30%;
     overflow: auto;
   }

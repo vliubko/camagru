@@ -75,7 +75,7 @@ class AccountModel extends Model {
     }
 
     public function validateUserData() {
-        $errors[] = AccountModel::validatePassword();
+        $errors[] = AccountModel::validatePassword($this->password);
         $errors[] = AccountModel::validateEmail($this->email);
         $errors[] = AccountModel::validateUsername($this->username);
         $errors = array_filter($errors);
@@ -90,12 +90,44 @@ class AccountModel extends Model {
         return ;
     }
 
-    public function changePasswordCheck() {
-        $new_pwd = $this->password;
-        if ($new_pwd === $old_pwd) {
-            return "Password should not be as old password";
+    public function tryChangePassword() {
+        $user_id = $this->db->getUserId();
+        $user_data = $this->db->getUserDataById($user_id);
+        $old_pwd = hash('whirlpool', $_POST['oldPwd']);
+
+        if ($old_pwd !== $user_data['password']) {
+            $response['success'] = "false";
+            $response['message'] = "Old password does not match";
+            return $response;
         }
-        return ;
+
+        if ($_POST['oldPwd'] == $_POST['newPwd']) {
+            $response['success'] = "false";
+            $response['message'] = "Password should not be as old password";
+            return $response;
+        }
+
+        $message = $this->validatePassword($_POST['newPwd']);
+        if ($message) {
+            $response['success'] = "false";
+            $response['message'] = $message;
+            return $response;
+        }
+
+        $newPwd = hash('whirlpool', $_POST['newPwd']);
+        $this->updateUserPassword($user_id, $newPwd);
+
+        $response['success'] = "OK";
+        $response['message'] = "Password changed successfully";
+        return $response;
+    }
+
+    public function updateUserPassword($user_id, $newPwd) {
+        $fields = array("password",);
+        $values = array($newPwd);
+        $sql = "UPDATE user SET ".$this->db->pdoSet($fields,$values)." WHERE id = ".$user_id;
+
+        $res = $this->db->run($sql);
     }
 
     public function registerUser() {
@@ -288,11 +320,11 @@ class AccountModel extends Model {
         return false;
     }
 
-    public function validatePassword() {
-        if (strlen($this->password) < 6) {
+    public function validatePassword($password) {
+        if (strlen($password) < 6) {
             return "Password too short (at least 6 symbols)";
         }
-        if (!preg_match('/^(?=.*\d)([0-9a-zA-Z@!]+)$/', $this->password)) {
+        if (!preg_match('/^(?=.*\d)([0-9a-zA-Z@!]+)$/', $password)) {
             return "Password should contain at least one digit";
         }
         return;

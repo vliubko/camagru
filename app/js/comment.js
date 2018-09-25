@@ -91,6 +91,7 @@ function sendRequestComment(elem) {
             nCount += 1;
             createNewDivComment(resp_json['username'], message, photoId);
         }
+        setTimeout(window.location.reload.bind(window.location), 2000);
     })
     XHR.open("POST", '/comment');
     XHR.send(commentData)

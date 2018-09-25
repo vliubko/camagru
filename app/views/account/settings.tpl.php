@@ -29,25 +29,10 @@
 
             <p> Email </p>
             <input type="email" name="email" id="email" value="<?php echo $_SESSION['email'] ?>" required><br>
-            <!-- <div class="box">
+            
+            <div class="box">
                 <a class="button-password" href="#popup1">Change Password</a>
             </div>
-
-            <div id="popup1" class="overlay">
-                <div class="popup">
-                    <h2>Change Password</h2>
-                    <a class="close" href="#">&times;</a>
-                    <div class="content">
-                        <form method="post">
-                            <input type="password" name="old_pwd" id="old_pwd" placeholder="Old Password"><br>
-                            <input type="password" name="password" id="password" placeholder="New Password"><br>
-                            <button type="submit">
-                                Change
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div> -->
         <p>
             <input type="checkbox" class="checkbox" id="checkbox" name="notification" value="1" 
                 <?php
@@ -59,13 +44,28 @@
         <button type="submit">
             Change
         </button>
-
-        
     </form>
+
+    <div id="popup1" class="overlay">
+        <div class="popup">
+            <h2>Change Password</h2>
+            <a class="close" href="#">&times;</a>
+            <div class="password-div">
+                <form id='change-password-form' method="post">
+                    <input type="password" name="old_pwd" id="old_pwd" placeholder="Old Password" required><br>
+                    <input type="password" name="password" id="password" placeholder="New Password" required><br>
+                    <button id="change-password-button" type="submit">
+                        Change
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <a href="/account/logout">Logout</a> <br>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/js/login_script.js"></script>
+    <script src="/js/password_change.js"></script>
 </body>
 </html>

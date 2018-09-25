@@ -50,6 +50,22 @@ class AccountController extends Controller {
             $this->view->render($this->pageTpl, $this->pageData);
         }
     }
+
+    public function changePassword() {
+        if (!isset($_SESSION['username'])) {
+            return;
+        }
+
+        if(!$_POST['oldPwd'] || !$_POST['newPwd']) {
+            header("Location: /public/404.html");
+            return;
+        }
+
+        $response = $this->model->tryChangePassword();
+
+        header('Content-type: application/json');
+        echo json_encode($response);
+    }
     
     public function recovery() {
         if($this->model->checkSession()) {
@@ -100,7 +116,6 @@ class AccountController extends Controller {
                 
                 $this->view->render($this->pageTpl, $this->pageData);
             }
-            
         }
     }
 
