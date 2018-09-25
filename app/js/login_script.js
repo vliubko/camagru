@@ -1,5 +1,4 @@
 $(document).ready(function(){
-    
         $("#form-signin").submit(function(e){
             e.preventDefault();
     
@@ -12,6 +11,5 @@ $(document).ready(function(){
                 $("img.profile-img").attr("src", "/data/images/loading.png");
                 $(this).unbind().submit();
             }
-        });
-    
-    });
+        }); 
+});
