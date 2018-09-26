@@ -15,22 +15,58 @@
     
     <?php include_once ROOT. "/views/header.php" ; ?>
 
-    <h1 class="text-center login-title">Photos Camagru</h1>
     
-    Add photo here.
-    Canvas and buttons?
 
-    <form>
-        <input type=button id="camera-button" value="Open Camera" onClick="attach_cam()">
-        <input type=button style="visibility: hidden;" id="camera-button-take-snap" value="Take Snapshot" onClick="take_snapshot()">
-    </form>
-    <div id="results" style="display: none;">
-    </div>
-    
-	<div id="my_camera">
-    </div>
+    <div id="parent-div">
 
-    
+        <div id="choice-div">
+        <center>
+            <h1 class="text-center login-title">Photo part Camagru</h1>
+            
+            <a class="btn blue" id="open-camera-button" onClick="attach_cam()">Open Camera</a>
+            <a class="btn green" href="#popup1" id="camera-button-take-snap">Upload photo</a>
+        </center>
+        </div>
+
+        <!-- style="visibility: hidden;" -->
+
+        <div id="results" style="display: none;">
+        </div>
+
+        <?php include 'loading_spinner.php' ?>
+
+        <div id="my_camera">
+        </div>
+
+        <div id="stickers-div">
+            <div id="stickers-salt" class="div_with_sticker_img">
+                <img src="/data/stickers/salt.png">
+            </div>
+            <div id="stickers-cool" class="div_with_sticker_img">
+                <img src="/data/stickers/cool.png">
+            </div>
+            <div id="stickers-baby" class="div_with_sticker_img">
+                <img src="/data/stickers/baby.png">
+            </div>
+            <div id="stickers-cat" class="div_with_sticker_img">
+                <img src="/data/stickers/cat.png">
+            </div>
+        </div>
+
+        <div id="popup1" class="overlay">
+        <div class="popup">
+            <a class="close" href="#">&times;</a>
+            <div class="upload-div">
+                <form id="upload form" method="POST" enctype="multipart/form-data">
+                    <input style="width: 300px;" class="btn red" name="upload" type="file">
+                    <br>
+                    <input class="btn green" type="submit" value="Send">
+                </form>
+            </div>
+        </div>
+        </div>
+
+    </div>
 	
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/js/login_script.js"></script>

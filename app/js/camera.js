@@ -7,9 +7,11 @@ var shutter = new Audio();
 shutter.autoplay = false;
 shutter.src = navigator.userAgent.match(/Firefox/) ? '/data/sounds/shutter.ogg' : '/data/sounds/shutter.mp3';
 
-const cameraButton = document.getElementById('camera-button');
+const cameraButton = document.getElementById('open-camera-button');
 const cameraButtonTakeSnap = document.getElementById('camera-button-take-snap');
 const resultsDiv = document.getElementById('results');
+const spinner = document.getElementById('spinner');
+const stickersDiv = document.getElementById('stickers-div');
 
 Webcam.set({
   // live preview size
@@ -30,31 +32,49 @@ Webcam.set({
 });
 
 function attach_cam() {
-  cameraButton.style.visibility = "none";
-  cameraButtonTakeSnap.style.visibility = "visible";
-}
-
-Webcam.attach( '#my_camera' );
-
-function hide_results() {
-  cameraButton.style.visibility = "visible";
-  cameraButtonTakeSnap.style.visibility = "none";
+  spinner.style.display = "block";
+  setTimeout( function() { 
+    spinner.style.display = "none";
+    cameraButtonTakeSnap.setAttribute('onClick', 'take_snapshot()');
+    cameraButtonTakeSnap.removeAttribute('formmethod');
+    cameraButtonTakeSnap.removeAttribute('href');
+  } , 900);
+  Webcam.attach( '#my_camera' );
+  cameraButtonTakeSnap.innerHTML = "Take snapshot";
+  removeElement(cameraButton);
 }
 
 function take_snapshot() {
   // take snapshot and get image data
   Webcam.snap( function(data_uri) {
 
+    // snapshot taken
     if (resultsDiv.style.display == "none") {
+      cameraButtonTakeSnap.innerHTML = "Reload cam";
       resultsDiv.style.display = "block";
       resultsDiv.innerHTML = 
       '<img src="'+data_uri+'"/>' +
-      '<button class=\"btn blue\">Stickers</button>' +
-      '<button class=\"btn green\">Upload now</button>';
-    } else {
+      '<button class=\"btn blue\" onClick=\"show_stickers_div()\" id="stickers_button">Stickers</button>' +
+      '<button class=\"btn green\" >Upload now</button>';
+    } else 
+    // camera reloaded
+    {
+      hide_stickers_div();
       resultsDiv.style.display = "none";
-      hide_results();
+      cameraButtonTakeSnap.innerHTML = "Take snapshot";
     }
   });
+}
+
+function hide_stickers_div() {
+  stickersDiv.style.visibility = "hidden";
+}
+
+function show_stickers_div() {
+    stickersButton = document.getElementById('stickers_button');
+    stickersDiv.style.visibility = "visible";
+}
+
+function upload_photo() {
 
 }

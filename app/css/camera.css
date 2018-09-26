@@ -6,3 +6,38 @@
 #my_camera {
     z-index: 20;
 }
+
+#parent-div {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    margin: -100px 0 0 -150px;
+    display: block;
+}
+
+#choice-div {
+    position: relative;
+    margin: 0 auto;
+}
+
+#stickers-div {
+    margin-top: 20%;
+    width: 360px;
+    height: 200px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    visibility: hidden;
+    display: flex;
+}
+
+.div_with_sticker_img  {
+    height: 180px;
+    background: grey;
+    border-style: solid 5px;
+    border-color: black;
+}
+
+.div_with_sticker_img img {
+    height: 150px;
+    
+}
