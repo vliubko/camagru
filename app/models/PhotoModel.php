@@ -37,16 +37,15 @@ class PhotoModel extends Model {
 
     public function uploadPhoto() {
         $base64_string = $_POST['base64img'];
-        $file = $_POST['filename'];
 
         // var_dump($file . ".{$type}");
 
-        $res = $this->base64_to_jpeg($base64_string, $file);
+        $res = $this->base64_to_jpeg($base64_string);
 
         return $res;
     }
 
-    public function base64_to_jpeg($base64_string, $file) {
+    public function base64_to_jpeg($base64_string) {
         // split the string on commas
         // $data[ 0 ] == "data:image/png;base64"
         // $data[ 1 ] == <actual base64 string>

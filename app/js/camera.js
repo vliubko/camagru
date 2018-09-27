@@ -13,6 +13,8 @@ const resultsDiv = document.getElementById('results');
 const spinner = document.getElementById('spinner');
 const stickersDiv = document.getElementById('stickers-div');
 
+var base64imgstring;
+
 Webcam.set({
   // live preview size
   width: 480,
@@ -52,10 +54,11 @@ function take_snapshot() {
     if (resultsDiv.style.display == "none") {
       cameraButtonTakeSnap.innerHTML = "Reload cam";
       resultsDiv.style.display = "block";
+      base64imgstring = data_uri;
       resultsDiv.innerHTML = 
       '<img src="'+data_uri+'"/>' +
       '<button class=\"btn blue\" onClick=\"show_stickers_div()\" id="stickers_button">Stickers</button>' +
-      '<button class=\"btn green\" >Upload now</button>';
+      '<button id="upload_photo_button" class=\"btn green\" onClick=\"sendRequestUploadFromCamera(base64imgstring)\">Upload now</button>';
     } else 
     // camera reloaded
     {
@@ -73,4 +76,35 @@ function hide_stickers_div() {
 function show_stickers_div() {
     stickersButton = document.getElementById('stickers_button');
     stickersDiv.style.visibility = "visible";
+}
+
+function sendRequestUploadFromCamera(base64img) {
+  let XHR = new XMLHttpRequest()
+  let fileData = new FormData();
+
+  fileData.append('base64img', base64img)
+
+  XHR.addEventListener("load", function(event) {
+      // console.log("XHR loaded")
+      // console.log("Like id is:", photoId)
+      console.log('answer = > ', event.target.responseText)
+      
+      if (event.target.responseText === "error") {
+          alert("Something goes ne tak.");
+          return;
+      }
+      newDiv = document.createElement('div');
+      newDiv.setAttribute('id', 'message_div_from_cam');
+      newDiv.innerHTML = "Photo uploaded!";
+      resultsDiv.appendChild(newDiv)
+      document.getElementById('upload_photo_button').removeAttribute('onClick');
+
+      setTimeout(function(){
+        location = ''
+      },1000)
+
+      // resp_json = JSON.parse(event.target.responseText);
+  })
+  XHR.open("POST", '/photo/upload/');
+  XHR.send(fileData)
 }

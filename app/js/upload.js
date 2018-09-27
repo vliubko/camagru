@@ -17,7 +17,6 @@ function createNewDivMessage(message) {
         newDiv.innerHTML = message;
         form.appendChild(newDiv);
     }
-    
 }
 
 sendFileButton.addEventListener('click', function (e) {
@@ -61,7 +60,6 @@ function sendRequestUpload(file) {
 
     createNewDivMessage(file.name);
     fileData.append('base64img', base64img)
-    fileData.append('filename', file.name)
 
     XHR.addEventListener("load", function(event) {
         // console.log("XHR loaded")
