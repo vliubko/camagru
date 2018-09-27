@@ -74,7 +74,3 @@ function show_stickers_div() {
     stickersButton = document.getElementById('stickers_button');
     stickersDiv.style.visibility = "visible";
 }
-
-function upload_photo() {
-
-}

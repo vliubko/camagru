@@ -32,9 +32,7 @@ function htmlspecialchars(str) {
 
 function createNewDivComment(author, message, photoId) {
     newDiv = document.createElement('div');
-    console.log('message: ', message);
     newDiv.innerHTML = author + ' ' + message;
-    console.log(newDiv);
 
     fullId = 'comments_div_' + photoId;
     commentsDiv = document.getElementById(fullId)
@@ -76,7 +74,6 @@ function sendRequestComment(elem) {
 
     commentData.append('photo-id', photoId)
     commentData.append('comment', message)
-    console.log(message);
 
     XHR.addEventListener("load", function(event) {
         resp_json = JSON.parse(event.target.responseText);

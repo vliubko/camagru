@@ -34,4 +34,19 @@ class PhotoController extends Controller {
         }
 		$this->view->render($this->pageTpl, $this->pageData);
     }
+
+    public function upload() {
+        if (!AccountModel::checkSession()) {
+            header ("Location: /account/login");
+        }
+
+        if(!$_POST['base64img']) {
+            header("Location: /public/404.html");
+            return;
+        }
+        $res = $this->model->uploadPhoto();
+        if (empty($res) || $res['success'] === FALSE) {
+            echo "error";
+        }
+    }
 }

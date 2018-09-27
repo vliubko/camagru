@@ -15,8 +15,6 @@
     
     <?php include_once ROOT. "/views/header.php" ; ?>
 
-    
-
     <div id="parent-div">
 
         <div id="choice-div">
@@ -54,16 +52,19 @@
         </div>
 
         <div id="popup1" class="overlay">
-        <div class="popup">
-            <a class="close" href="#">&times;</a>
-            <div class="upload-div">
-                <form id="upload form" method="POST" enctype="multipart/form-data">
-                    <input style="width: 300px;" class="btn red" name="upload" type="file">
-                    <br>
-                    <input class="btn green" type="submit" value="Send">
-                </form>
+            <div class="popup">
+                <a class="close" href="#">&times;</a>
+                <div class="upload-div">
+                    <center>
+                    <form id="upload_form" method="POST" enctype="multipart/form-data">
+                        <input type="button" style="width: 100px;" class="btn red" id="upload_file_button" value="Get file">
+                        <input type="file" style="display: none;" id="default_upload_file_button" accept="image/*">
+                        <br>
+                        <input type="button" class="btn green" style="width: 100px;" id="send_file_button" value="Send">
+                    </form>
+                    </center>
+                </div>
             </div>
-        </div>
         </div>
 
     </div>
@@ -72,6 +73,7 @@
     <script src="/js/login_script.js"></script>
     <script src="/js/webcam.min.js"></script>
     <script src="/js/camera.js"></script>
+    <script src="/js/upload.js"></script>
 
 </body>
 </html>

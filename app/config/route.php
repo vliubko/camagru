@@ -32,7 +32,8 @@ class Routing {
         
         $controller = new $controllerName();
         
-        if ($controllerName == "PhotoController" && $action != "index") {
+
+        if ($controllerName == "PhotoController" && is_numeric($action)) {
             $response = $controller->showPhoto($action);
             return ;
         }

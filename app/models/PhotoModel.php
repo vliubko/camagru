@@ -34,4 +34,36 @@ class PhotoModel extends Model {
         }
         return $comments;
     }
+
+    public function uploadPhoto() {
+        $base64_string = $_POST['base64img'];
+        $file = $_POST['filename'];
+
+        // var_dump($file . ".{$type}");
+
+        $res = $this->base64_to_jpeg($base64_string, $file);
+
+        return $res;
+    }
+
+    public function base64_to_jpeg($base64_string, $file) {
+        // split the string on commas
+        // $data[ 0 ] == "data:image/png;base64"
+        // $data[ 1 ] == <actual base64 string>
+        $data = explode( ',', $base64_string);
+        $base64str = base64_decode($data[1]);
+
+        $file = ROOT . "/uploads/" . $file;
+
+        $res['success'] = file_put_contents($file, $base64str);
+        $res['file'] = $file;
+
+        $mimeType = mime_content_type($file);
+
+        if (strpos($mimeType, "image/") === FALSE) {
+            return ;
+        }
+
+        return $res;
+    }
 }
