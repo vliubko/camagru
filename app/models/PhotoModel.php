@@ -51,9 +51,14 @@ class PhotoModel extends Model {
         // $data[ 0 ] == "data:image/png;base64"
         // $data[ 1 ] == <actual base64 string>
         $data = explode( ',', $base64_string);
+        $type = substr($data[0], strpos($data[0], "/") + 1, 4);
+        $type = str_replace(";", "", $type);
+
         $base64str = base64_decode($data[1]);
 
-        $file = ROOT . "/uploads/" . $file;
+        $unique_stamp = sprintf("%0.6f", microtime(true));
+
+        $file = ROOT . "/uploads/" . uniqid("photo_") . $unique_stamp . ".{$type}";
 
         $res['success'] = file_put_contents($file, $base64str);
         $res['file'] = $file;
