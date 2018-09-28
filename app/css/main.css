@@ -6,6 +6,8 @@
     padding: 10px;
     display: flex; 
     flex-wrap: wrap;
+    justify-content: center;
+    /* left: 0; */
   }
 
   .photo {

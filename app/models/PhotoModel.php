@@ -52,6 +52,7 @@ class PhotoModel extends Model {
         // var_dump($file . ".{$type}");
         $res = $this->base64_to_jpeg($base64_string);
 
+    
         return $res;
     }
 
@@ -64,23 +65,53 @@ class PhotoModel extends Model {
         $type = str_replace(";", "", $type);
 
         $base64str = base64_decode($data[1]);
-
         $unique_stamp = sprintf("%0.6f", microtime(true));
-
         $file = ROOT . "/uploads/" . uniqid("photo_") . $unique_stamp . ".{$type}";
+        
+        $sticker = ROOT .$_POST['sticker'];
 
         $res['success'] = file_put_contents($file, $base64str);
         $res['file'] = $file;
 
+        if ($sticker) {
+            $this->merge_sticker($file, $sticker);
+        }
+        
         $mimeType = mime_content_type($file);
 
         if (strpos($mimeType, "image/") === FALSE) {
             return ;
         }
-        $photo_url = str_replace(ROOT, "", $file);
 
+        $photo_url = str_replace(ROOT, "", $file);
         $this->addNewPhotoToDB($photo_url);
 
         return $res;
+    }
+
+    public function merge_sticker($dest_file, $src_file) {
+        $dest = imagecreatefrompng($dest_file);
+        $src = imagecreatefrompng($src_file);
+
+        list($srcfileWidth, $srcfileHeight) = getimagesize($src_file);
+
+        if (!$dest || !$src) {
+            return ;
+        }
+
+        // imagealphablending($src, true);
+        // imagesavealpha($src, true);
+
+        imagealphablending($dest, true);
+        imagesavealpha($dest, true);
+
+        imagecopy($dest, $src, 30, 30, 0, 0, $srcfileWidth, $srcfileHeight);
+        
+        header('Content-Type: image/png');
+
+        imagepng($dest, $dest_file);
+        
+        imagedestroy($dest);
+        imagedestroy($src);
     }
 }

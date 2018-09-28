@@ -44,8 +44,7 @@ class PhotoController extends Controller {
             header("Location: /public/404.html");
             return;
         }
-        echo($_POST['sticker']);
-        return ;
+
         $res = $this->model->uploadPhoto();
         if (empty($res) || $res['success'] === FALSE) {
             echo "error";

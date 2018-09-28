@@ -19,7 +19,7 @@
 
         <div id="choice-div">
         <center>
-            <h1 class="text-center login-title">Photo part Camagru</h1>
+            <h1 class="text-center login-title">QuickCam Camagru</h1>
             
             <a class="btn blue" id="open-camera-button" onClick="attach_cam()">Open Camera</a>
             <a class="btn green" href="#popup1" id="camera-button-take-snap">Upload photo</a>
