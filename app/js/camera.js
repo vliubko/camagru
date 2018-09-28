@@ -13,6 +13,8 @@ const resultsDiv = document.getElementById('results');
 const spinner = document.getElementById('spinner');
 const stickersDiv = document.getElementById('stickers-div');
 
+var rememberedSticker;
+
 var base64imgstring;
 
 Webcam.set({
@@ -78,11 +80,16 @@ function show_stickers_div() {
     stickersDiv.style.visibility = "visible";
 }
 
+function rememberSticker(sticker_name) {
+    rememberedSticker = '/data/stickers/' + sticker_name + '.png';
+}
+
 function sendRequestUploadFromCamera(base64img) {
   let XHR = new XMLHttpRequest()
   let fileData = new FormData();
 
   fileData.append('base64img', base64img)
+  fileData.append('sticker', rememberedSticker)
 
   XHR.addEventListener("load", function(event) {
       // console.log("XHR loaded")

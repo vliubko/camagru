@@ -37,16 +37,16 @@
         </div>
 
         <div id="stickers-div">
-            <div id="stickers-salt" class="div_with_sticker_img">
+            <div id="stickers-salt" onClick="rememberSticker('salt')" class="div_with_sticker_img">
                 <img src="/data/stickers/salt.png">
             </div>
-            <div id="stickers-cool" class="div_with_sticker_img">
+            <div id="stickers-cool"  onClick="rememberSticker('cool')" class="div_with_sticker_img">
                 <img src="/data/stickers/cool.png">
             </div>
-            <div id="stickers-baby" class="div_with_sticker_img">
+            <div id="stickers-baby"  onClick="rememberSticker('baby')" class="div_with_sticker_img">
                 <img src="/data/stickers/baby.png">
             </div>
-            <div id="stickers-cat" class="div_with_sticker_img">
+            <div id="stickers-cat"  onClick="rememberSticker('cat')" class="div_with_sticker_img">
                 <img src="/data/stickers/cat.png">
             </div>
         </div>

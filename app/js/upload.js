@@ -55,7 +55,7 @@ function encodeImageFileAsURL(file) {
         base64img = reader.result;
         sendRequestUpload(file);
     }
-  }
+}
 
 function sendRequestUpload(file) {
     let XHR = new XMLHttpRequest()

@@ -16,34 +16,33 @@
         echo "<br>No photos in database!" ;
     } else {
             echo "<div class=\"photos\">";
-        foreach ($pageData['photos'] as $photo) { ?>
+        foreach ($pageData['photos'] as $key => $photo) { ?>
                 <div class="photo" id="photo-<?php echo $photo['id'] ?>">
-                <?php 
-                    echo "<img height=20px src=\"/data/images/user-shape.png\">";
-                    echo " " . $photo['username']."<br>";
-                    echo "<img class=\"img-photo\" height=300px src=".$photo['url']."><br>\n";
+                    <img height=20px src="/data/images/user-shape.png">
+                    <?php echo " " . $photo['username'] ?> <br> 
+                    <img class="img-photo" height=300px src="<?php echo $photo['url']; ?>"><br>
 
-                    echo "<div class=\"number-likes\">";
-                        echo $photo['likes'];
-                    echo "</div>";
+                    <div class="number-likes">
+                        <?php echo $photo['likes']; ?>
+                    </div>
                     
-                    echo "<div class=\"like\">";
-                    echo "<img class=\"like-img\" height=20px src=\"/data/images/";
-                    if (!empty($photo['like_status'])) {
-                        echo "like_full.png\">";
-                    } else {
-                        echo "like.png\">";
-                    }
-                    echo "</div>";
+                    <div class="like">
+                        <img class="like-img" height=20px src="/data/images/<?php if (!empty($photo['like_status'])) {
+                                    echo "like_full.png";
+                                } else {
+                                    echo "like.png";
+                                }
+                        ?>">
+                    </div>
+                    
+                    <div class="comment-img-div">
+                        <a href="/photo/<?php echo $photo['id']; ?>">
+                            <img class="comment-img" height=20px src="/data/images/comment.png">
+                        </a>
+                    </div>
 
-                    echo "<div class=\"comment-img-div\">";
-                        echo "<a href=\"/photo/". $photo['id'] . "\">";
-                            echo "<img class=\"comment-img\" height=20px src=\"/data/images/comment.png\">";
-                        echo "</a>";
-                    echo "</div>";
-
-                    echo "<div class=\"comments\" id=\"comments_div_" . $photo['id'] . "\">";
-                        foreach ($photo['comments'] as $key => $comment) {
+                    <div class="comments" id="comments_div_ <?php echo $photo['id'];?>">
+                        <?php foreach ($photo['comments'] as $key => $comment) {
                             echo "<div class=\"comment-" . $comment['id'] .  "\">";
                                 echo $comment['username'] . " ";
                                 echo $comment['message'];
@@ -57,26 +56,27 @@
                                 echo "</div>";
                                 break ;
                             }
-                        }
-                    echo "</div>";
+                        } ?>
+                    </div>
 
-                    echo "<div class=\"text_date\">";
-                        echo $photo['timeAgo'];
-                    echo "</div>";
+                    <div class="text_date">
+                        <?php echo $photo['timeAgo']; ?>
+                    </div>
 
-                    echo "<hr>";
-                    echo "<div class=\"new_comment_div\">";
-                        echo "<form id=\"comment_form_" . $photo['id'] . "\">";
-                        echo "<input id=\"comment_text_" . $photo['id'] . "\" placeholder=\"Enter a comment...\" class=\"comment_text\"></input>";
-                        echo "<input id=\"comment_button_" . $photo['id'] . "\" type=\"submit\" value=\"Add\"></input>";
-                        echo "</form>";
-                    echo "\n</div>\n";
+                    <hr>
+                    <div class="new_comment_div">
+                        <form id="comment_form_ <?php echo $photo['id'];?>">
+                            <input id="comment_text_ <?php echo $photo['id'];?>" placeholder="Enter a comment..." class="comment_text"></input>
+                            <input id="comment_button_ <?php echo $photo['id'];?>" type="submit" value="Add"></input>
+                        </form>
+                    </div>
 
-                echo "\n</div>\n";
-        }
-            echo "\n</div>\n";
-    }
-    ?>
+                </div> <br>
+        <?php
+        } ?>
+        </div>
+    <?php
+} ?>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/js/login_script.js"></script>

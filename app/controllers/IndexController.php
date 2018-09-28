@@ -13,6 +13,7 @@ class IndexController extends Controller {
 		$this->pageData['title'] = "Camagru";
 		$this->pageData['photos'] = $this->model->showPhotos();
 
+
 		$this->view->render($this->pageTpl, $this->pageData);
 	}
 

@@ -1,7 +1,7 @@
 #header-div {
-    display: inline-flex;
+    display: flex;
+    flex-wrap: nowrap;
     width: 100%;
-    position: relative;
 }
 
 #devops-logo-img {
@@ -10,11 +10,22 @@
 
 #logo-div {
     display: inline-block;
+    width: 200px;
 }
 
 #buttons-div {
-    display: inline-block;
-    position: absolute;
-    margin-left: 80%;
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+#other_div {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    margin-left: 15px;
+}
+
+ul {
+    list-style-type: none;
 }
 

@@ -35,11 +35,21 @@ class PhotoModel extends Model {
         return $comments;
     }
 
+    public function addNewPhotoToDB($photo_url) {
+        $user_id = $this->db->getUserId();
+        
+        $fields = array("user","url");
+        $values = array(
+            $user_id, $photo_url);
+        $sql = "INSERT INTO photo SET ".$this->db->pdoSet($fields,$values);
+        $res = $this->db->run($sql);
+        return ;
+    }
+
     public function uploadPhoto() {
         $base64_string = $_POST['base64img'];
 
         // var_dump($file . ".{$type}");
-
         $res = $this->base64_to_jpeg($base64_string);
 
         return $res;
@@ -67,6 +77,9 @@ class PhotoModel extends Model {
         if (strpos($mimeType, "image/") === FALSE) {
             return ;
         }
+        $photo_url = str_replace(ROOT, "", $file);
+
+        $this->addNewPhotoToDB($photo_url);
 
         return $res;
     }
