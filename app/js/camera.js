@@ -31,7 +31,7 @@ Webcam.set({
   crop_height: 360,
   
   // format and quality
-  image_format: 'jpeg',
+  image_format: 'png',
   jpeg_quality: 100
 });
 
@@ -81,7 +81,10 @@ function show_stickers_div() {
 }
 
 function rememberSticker(sticker_name) {
-    rememberedSticker = '/data/stickers/' + sticker_name + '.png';
+    if (sticker_name) {
+      rememberedSticker = '/data/stickers/' + sticker_name + '.png';
+    }
+    
 }
 
 function sendRequestUploadFromCamera(base64img) {
@@ -89,7 +92,10 @@ function sendRequestUploadFromCamera(base64img) {
   let fileData = new FormData();
 
   fileData.append('base64img', base64img)
-  fileData.append('sticker', rememberedSticker)
+  if (rememberedSticker) {
+    fileData.append('sticker', rememberedSticker)
+  }
+  
 
   XHR.addEventListener("load", function(event) {
       // console.log("XHR loaded")
@@ -100,10 +106,11 @@ function sendRequestUploadFromCamera(base64img) {
           alert("Something goes ne tak.");
           return;
       }
-      newDiv = document.createElement('div');
-      newDiv.setAttribute('id', 'message_div_from_cam');
-      newDiv.innerHTML = "Photo uploaded!";
-      resultsDiv.appendChild(newDiv)
+      // newDiv = document.createElement('div');
+      // newDiv.setAttribute('id', 'message_div_from_cam');
+      // newDiv.innerHTML = "Photo uploaded!";
+      // document.getElementById('choice-div').prepend(newDiv)
+      document.getElementsByClassName('text-center login-title')[0].innerHTML = "Photo uploaded!"
       document.getElementById('upload_photo_button').removeAttribute('onClick');
 
       setTimeout(function(){
