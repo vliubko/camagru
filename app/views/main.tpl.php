@@ -16,8 +16,9 @@
         echo "<br>No photos in database!" ;
     } else {
             echo "<div class=\"photos\">";
-        foreach ($pageData['photos'] as $photo) {
-                echo "<div class=\"photo\" id=\"photo-". $photo['id']. "\">\n";
+        foreach ($pageData['photos'] as $photo) { ?>
+                <div class="photo" id="photo-<?php echo $photo['id'] ?>">
+                <?php 
                     echo "<img height=20px src=\"/data/images/user-shape.png\">";
                     echo " " . $photo['username']."<br>";
                     echo "<img class=\"img-photo\" height=300px src=".$photo['url']."><br>\n";

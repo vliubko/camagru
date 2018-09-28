@@ -41,7 +41,10 @@ sendFileButton.addEventListener('click', function (e) {
     setTimeout( function () {
         sendFileButton.setAttribute('value', "Send");
         sendFileButton.setAttribute('class', "btn green");
-    }, 1000);
+        createNewDivMessage("Sent succesfully!");
+        setTimeout("window.location='/photo/'", 1500);
+    }, 2000);
+    defaultFileUploadButton.value = "";
 })
 
 function encodeImageFileAsURL(file) {
