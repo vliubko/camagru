@@ -66,7 +66,7 @@ function sendRequestComment(elem) {
 
 
     var fulllId = elem.getAttribute('id');
-    var photoId = fulllId.substr(13);
+    var photoId = fulllId.substr(14);
 
     let message = htmlspecialchars(elem.value)
 
@@ -76,6 +76,7 @@ function sendRequestComment(elem) {
     commentData.append('comment', message)
 
     XHR.addEventListener("load", function(event) {
+        console.log(event.target.responseText);
         resp_json = JSON.parse(event.target.responseText);
         if (resp_json['error']) {
             window.location="/account/login"

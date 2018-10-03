@@ -99,9 +99,6 @@ class PhotoModel extends Model {
             return ;
         }
 
-        // imagealphablending($src, true);
-        // imagesavealpha($src, true);
-
         imagealphablending($dest, true);
         imagesavealpha($dest, true);
 
@@ -114,4 +111,25 @@ class PhotoModel extends Model {
         imagedestroy($dest);
         imagedestroy($src);
     }
+
+    public function deletePhotoById($photo_id) {
+        if (!$this->checkUserAccess($photo_id)) {
+            http_response_code(403);
+            echo "403. Forbidden" ;
+            return ;
+        }
+        $deleted = $this->db->pdoDelete("photo", $photo_id);
+        header("Location: /");
+    }
+
+    public function checkUserAccess($photo_id) {
+        $current_user_id = $this->db->getUserId();
+        $owner_user_id = $this->db->getUserIdByPhotoId($photo_id);
+        if ($current_user_id == $owner_user_id) {
+            return true;
+        }
+        return ;
+    }
+
+
 }

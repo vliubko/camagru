@@ -50,4 +50,15 @@ class PhotoController extends Controller {
             echo "error";
         }
     }
+
+    public function delete() {
+        if (!AccountModel::checkSession()) {
+            header ("Location: /account/login");
+        }
+        $route = explode("/", $_SERVER['REQUEST_URI']);
+        $photo_id = $route[3];
+
+        $this->model->deletePhotoById($photo_id);
+    }
+
 }

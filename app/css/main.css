@@ -30,6 +30,20 @@
     margin-left: 10px;
   }
 
+  .close {
+    /* top: 20px; */
+    /* right: 30px; */
+    transition: all 200ms;
+    font-size: 25px;
+    font-weight: bold;
+    text-decoration: none;
+    color: #e71a1a;
+  }
+
+  .close:hover {
+    color: #333;
+  }
+
   /* .comment {
     display: inline-block;
   } */

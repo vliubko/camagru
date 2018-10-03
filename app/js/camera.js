@@ -22,10 +22,6 @@ Webcam.set({
   width: 480,
   height: 360,
   
-  // // device capture size
-  // dest_width: 640,
-  // dest_height: 480,
-  
   // final cropped size
   crop_width: 360,
   crop_height: 360,
@@ -58,9 +54,12 @@ function take_snapshot() {
       resultsDiv.style.display = "block";
       base64imgstring = data_uri;
       resultsDiv.innerHTML = 
-      '<img src="'+data_uri+'"/>' +
-      '<button class=\"btn blue\" onClick=\"show_stickers_div()\" id="stickers_button">Stickers</button>' +
-      '<button id="upload_photo_button" class=\"btn green\" onClick=\"sendRequestUploadFromCamera(base64imgstring)\">Upload now</button>';
+      '<div>' +
+        '<img id="result_img" src="'+data_uri+'"/>' +
+        '<img id="show_sticker">' +
+        '<button id="stickers_button" class="btn blue" onClick="show_stickers_div()">Stickers</button>' +
+        '<button id="upload_photo_button" class="btn green" onClick="sendRequestUploadFromCamera(base64imgstring)">Upload now</button>' +  
+      '</div>';
     } else 
     // camera reloaded
     {
@@ -80,11 +79,12 @@ function show_stickers_div() {
     stickersDiv.style.visibility = "visible";
 }
 
-function rememberSticker(sticker_name) {
+function clickSticker(sticker_name) {
     if (sticker_name) {
       rememberedSticker = '/data/stickers/' + sticker_name + '.png';
     }
-    
+    document.getElementById('show_sticker').src = rememberedSticker;
+    console.log(document.getElementById('show_sticker').src);
 }
 
 function sendRequestUploadFromCamera(base64img) {

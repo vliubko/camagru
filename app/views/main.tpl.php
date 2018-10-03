@@ -18,10 +18,21 @@
             echo "<div class=\"photos\">";
         foreach ($pageData['photos'] as $key => $photo) { ?>
                 <div class="photo" id="photo-<?php echo $photo['id'] ?>">
-                    <img height=20px src="/data/images/user-shape.png">
-                    <?php echo " " . $photo['username'] ?> <br> 
-                    <img class="img-photo" height=300px src="<?php echo $photo['url']; ?>"><br>
-
+                    <div style="display: inline-flex; width: 100%; justify-content: space-between;">
+                        <img height=20px src="/data/images/user-shape.png">
+                        <div> <?php echo $photo['username'] ?> </div>
+                        <div>
+                            <?php if(!empty($photo['canDelete'])) {
+                                if ($photo['canDelete']) {
+                                    echo "<a class=\"close\" href=\"" . "/photo/delete/" . $photo['id'] . "\">&times;</a>";
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div>
+                        <img class="img-photo" height=300px src="<?php echo $photo['url']; ?>"><br>
+                    </div>
                     <div class="number-likes">
                         <?php echo $photo['likes']; ?>
                     </div>

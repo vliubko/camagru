@@ -39,12 +39,13 @@ class CommentModel extends Model {
 			'MIME-Version' => '1.0',
 			'Content-Type' => 'text/html; charset=UTF-8',
         );
-        $src = "http://" . $_SERVER['SERVER_NAME'] . "/photo/" . $photo_id;
+        $src = "http://" . $_SERVER['SERVER_NAME'] . '/photo/' . $photo_id;
+        
         $first_row = $user_data['username'] . " , you have new comment on your photo! <br>";
         $second_row = $author . " commented: " . "\"" . $comment . "\"<br>" ;
         $thid_row = "You can check new comments ";
         $fourth_row = "<a href=\"" . $src . "\"> >> here <<</a>";
-    
+
         $message = $first_row . $second_row . $thid_row . $fourth_row;
 
         $error = mail($to, $subject, $message, $headers);
