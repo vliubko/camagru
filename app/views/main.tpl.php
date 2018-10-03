@@ -52,7 +52,7 @@
                         </a>
                     </div>
 
-                    <div class="comments" id="comments_div_ <?php echo $photo['id'];?>">
+                    <div class="comments" id="comments_div_<?php echo $photo['id'];?>">
                         <?php foreach ($photo['comments'] as $key => $comment) {
                             echo "<div class=\"comment-" . $comment['id'] .  "\">";
                                 echo $comment['username'] . " ";
