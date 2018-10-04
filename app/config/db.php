@@ -73,7 +73,8 @@ class MyPDO extends PDO {
                 FROM camagru.photo 
                 LEFT JOIN camagru.like ON photo.id = like.photo
                 INNER JOIN camagru.user ON photo.user = user.id
-                GROUP BY photo.id, photo.url, user.username, user.id, photo.createdAt";
+                GROUP BY photo.id, photo.url, user.username, user.id, photo.createdAt
+                ORDER BY photo.createdAt DESC";
         $photos = MyPDO::run($sql)->fetchAll();
         return $photos;
     }
@@ -135,5 +136,15 @@ Class DB {
             exit();
         }
         return $connection;
+    }
+
+    public function exec_sql_from_file($path, $db) {
+        if (! preg_match_all("/('(\\\\.|.)*?'|[^;])+/s", file_get_contents($path), $m))
+            return;
+    
+        foreach ($m[0] as $sql) {
+            if (strlen(trim($sql)))
+                $db->exec($sql);
+        }
     }
 }
