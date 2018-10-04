@@ -118,6 +118,11 @@ class PhotoModel extends Model {
             echo "403. Forbidden" ;
             return ;
         }
+        $comments = $this->db->getComments($photo_id);
+
+        foreach ($comments as $i => $comment) {
+            $this->db->pdoDelete("comment", $comment['id']);
+        }
         $deleted = $this->db->pdoDelete("photo", $photo_id);
         header("Location: /");
     }
