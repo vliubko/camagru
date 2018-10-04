@@ -11,6 +11,7 @@ class LikeController extends Controller {
 
     public function index() {
         
+        
         if (!isset($_SESSION['username'])) {
             return;
         }

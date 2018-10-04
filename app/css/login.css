@@ -193,3 +193,7 @@
 .red:hover {
   background-color: #FF6656;
 }
+
+#small_btn {
+  font-size: 15px;
+}

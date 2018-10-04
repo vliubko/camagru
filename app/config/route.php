@@ -29,7 +29,7 @@ class Routing {
                 $action = substr($action, 0, strpos($action, "?"));
             }
         }
-        
+
         $controller = new $controllerName();
 
         if ($controllerName == "PhotoController" && is_numeric($action)) {

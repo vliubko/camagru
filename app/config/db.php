@@ -105,14 +105,46 @@ class MyPDO extends PDO {
         return $comments;
     }
 
-    // public function countLikes($photo_id) {
-    //     $sql = "SELECT COUNT(*) FROM camagru.like WHERE photo = ?";
-    //     $likes = MyPDO::run($sql, [$photo_id])->fetchColumn();
-    //     return $likes;
-    // }
+    public function execSQLFromFile($path, $db) {
+
+        if (! preg_match_all("/('(\\\\.|.)*?'|[^;])+/s", file_get_contents($path), $m))
+            return;
+
+        foreach ($m[0] as $sql) {
+            if (strlen(trim($sql)))
+                $db->exec($sql);
+        }
+    }
 }
 
 Class DB {
+
+    public static function createDB() {
+        $host = $_SERVER['MYSQL_HOST'];
+        $dbname = $_SERVER['MYSQL_DATABASE'];
+        
+        $dsn = 'mysql:host='.$host;
+        $user = $_SERVER['MYSQL_ROOT_USER'];
+        $pass = $_SERVER['MYSQL_ROOT_PASSWORD'];
+
+        $opt = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
+        ];
+        try {
+            $connection = new MyPDO($dsn, $user, $pass, $opt);
+            $sql = "CREATE DATABASE IF NOT EXISTS camagru";
+            // use exec() because no results are returned
+            $connection->exec($sql);
+        }
+        catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+            exit();
+        }
+        $connection = null;
+    }
 
     public static function connToDB() {
         $host = $_SERVER['MYSQL_HOST'];
@@ -138,13 +170,27 @@ Class DB {
         return $connection;
     }
 
-    public function exec_sql_from_file($path, $db) {
-        if (! preg_match_all("/('(\\\\.|.)*?'|[^;])+/s", file_get_contents($path), $m))
-            return;
-    
-        foreach ($m[0] as $sql) {
-            if (strlen(trim($sql)))
-                $db->exec($sql);
+    public function initalConnectToDB() {
+        $host = $_SERVER['MYSQL_HOST'];
+        $dbname = $_SERVER['MYSQL_DATABASE'];
+        
+        $dsn = 'mysql:dbname=INFORMATION_SCHEMA;host='.$host;
+        $user = $_SERVER['MYSQL_ROOT_USER'];
+        $pass = $_SERVER['MYSQL_ROOT_PASSWORD'];
+
+        $opt = [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'utf8'",
+        ];
+        try {
+            $connection = new MyPDO($dsn, $user, $pass, $opt);
         }
+        catch (PDOException $e) {
+            echo 'Error: ' . $e->getMessage();
+            exit();
+        }
+        return $connection;
     }
 }

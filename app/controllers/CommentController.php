@@ -12,6 +12,7 @@ class CommentController extends Controller {
     public function index() {
         if (!isset($_SESSION['username'])) {
             $arr['error'] = "no session";
+            http_response_code(403);
             header('Content-type: application/json');
             echo json_encode($arr);
             return;

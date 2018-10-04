@@ -70,7 +70,8 @@ function sendRequestUpload(file) {
         console.log('answer = > ', event.target.responseText)
         
         if (event.target.responseText === "error") {
-            createNewDivMessage("Something goes ne tak.");
+            alert("Something goes ne tak.");
+            window.location="/photo";
             return;
         }
 

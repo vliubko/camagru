@@ -2,12 +2,10 @@
   .photos {
     margin-right: 10px;
     text-align: left;
-    /* display: inline-flex; */
     padding: 10px;
     display: flex; 
     flex-wrap: wrap;
     justify-content: center;
-    /* left: 0; */
   }
 
   .photo {
@@ -43,16 +41,6 @@
 
   .close:hover {
     color: #333;
-  }
-
-  /* .comment {
-    display: inline-block;
-  } */
-  .comment-img {
-    
-  }
-
-  .text-date {
   }
 
   .img-photo {

@@ -29,3 +29,20 @@ ul {
     list-style-type: none;
 }
 
+input {
+    border: 1px solid green;
+    border-radius: 5px;
+    width: 100px; 
+    height: 20px; 
+    margin: 5px;
+    font-family: "MyriadPro", sans-serif;
+    font-size: 14px;
+}
+
+#upload_file_button {
+    height: auto;
+}
+
+#send_file_button {
+    height: auto;
+}

@@ -68,17 +68,19 @@ class PhotoModel extends Model {
         $unique_stamp = sprintf("%0.6f", microtime(true));
         $file = ROOT . "/uploads/" . uniqid("photo_") . $unique_stamp . ".{$type}";
         
-        $sticker = ROOT .$_POST['sticker'];
-
+        if($_POST['sticker']) {
+            $sticker = ROOT .$_POST['sticker'];
+        }
+        
         $res['success'] = file_put_contents($file, $base64str);
         $res['file'] = $file;
+
+        $mimeType = mime_content_type($file);
 
         if ($sticker) {
             $this->merge_sticker($file, $sticker);
         }
         
-        $mimeType = mime_content_type($file);
-
         if (strpos($mimeType, "image/") === FALSE) {
             return ;
         }
