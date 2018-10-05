@@ -1,7 +1,6 @@
 <?php
 
     if (!file_exists('config/build.json')) {
-        DB::createDB();
         
         $connection = DB::connToDB();
         MyPDO::execSQLFromFile(ROOT . '/config/camagru.sql', $connection);

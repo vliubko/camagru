@@ -42,7 +42,7 @@
                     echo "<a href=\"/comment/delete/" . $comment['id'] . "\" class=\"close-thik\"></a>";
                 }
             echo "</div>";
-            if ($key > 1) {
+            if ($key > 1 && !strpos($_SERVER['REQUEST_URI'], "photo")) {
                 echo "<div class=\"viewAllComments-div-" . $photo['id'] .  "\">";
                     echo "<a href=/photo/" . $photo['id'] . ">View all comments</a>";
                 echo "</div>";
